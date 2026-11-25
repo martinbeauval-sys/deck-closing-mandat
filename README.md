@@ -2,8 +2,8 @@
 
 Deck de l'appel de closing de l'offre ConciergElite B2B (Système M.A.N.D.A.T.).
 
-- En ligne : https://martinbeauval-sys.github.io/deck-closing-mandat/
-- Le fichier du deck : `index.html`. Les photos : `assets/` (équipe) et `assets/preuves/` (conciergeries).
+- En ligne : https://mandat.studio/deck-closing/ (relais nginx du serveur MANDAT vers ce GitHub Pages ; adresse directe : https://martinbeauval-sys.github.io/deck-closing-mandat/)
+- Le fichier du deck : `index.html`. Les photos : `assets/` (équipe) et `assets/preuves/` (conciergeries). La vidéo best-of : `assets/bestof.mp4`.
 - La version en ligne est la seule version de référence : toute modification se fait ici, jamais sur une copie envoyée par WhatsApp.
 
 ## Modifier le deck
