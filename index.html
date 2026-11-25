@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deck closing MANDAT</title>
+<meta name="description" content="Deck de closing du Système M.A.N.D.A.T. (offre B2B Concierge Elite) : 24 slides, repères visuels pour le closer, personnalisable par conciergerie (logo, couleur, récap), notes du closer (touche N), script complet avec ?script=1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+  /* Charte Système M.A.N.D.A.T. (version or, 31/10/2026) : papier, encre, or du sceau. Chiffres en mono, comme sur un contrat. */
+  :root{--paper:#FBF7EC;--card:#FFFFFF;--sunk:#F3EDDC;--ink:#15120C;--ink-2:#4A4538;--muted:#7A7363;--line:#E4DCC8;
+    --gold:#FFD51E;--gold-deep:#FFA000;--gold-ink:#7A5A00;--gold-soft:#FFF5CC;--ok:#1F8A4C;--bad:#C2412F;
+    --fd:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;--fb:"Figtree",ui-sans-serif,system-ui,sans-serif;--fm:"JetBrains Mono",ui-monospace,Menlo,monospace}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:var(--ink)}
+  body{font-family:var(--fb);color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+  .deck{position:fixed;top:50%;left:50%;width:1920px;height:1080px;transform-origin:center center;background:var(--paper)}
+  .slide{position:absolute;inset:0;width:1920px;height:1080px;display:none;overflow:hidden;background:var(--paper);
+    background-image:radial-gradient(900px 500px at 90% -10%,rgba(255,213,30,.22),transparent 65%),radial-gradient(700px 400px at -5% 110%,rgba(255,160,0,.10),transparent 60%)}
+  .slide.active{display:flex;flex-direction:column}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .slide.active>*{animation:fadeUp .5s ease both}
+  .slide.active>*:nth-child(2){animation-delay:.06s}.slide.active>*:nth-child(3){animation-delay:.12s}
+  .step{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+  .step.on{opacity:1;transform:none}
+  .notes{display:none}
+
+  /* Marque : six cases, seul le T est rempli */
+  .boxes{display:inline-flex;align-items:center;font-family:var(--fd);font-weight:800;line-height:1;color:var(--ink)}
+  .boxes .b{display:grid;place-items:center;width:1.25em;height:1.35em;border:.07em solid currentColor}
+  .boxes .dot{width:.42em;display:grid;place-items:center}.boxes .dot::before{content:"";width:.12em;height:.12em;border-radius:50%;background:var(--gold-deep)}
+  .boxes .b:last-child{background:var(--gold);border-color:var(--gold)}
+  .wm{display:inline-grid;gap:.22em;justify-items:start}.wm .sys{font:700 .34em/1 var(--fm);letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+  .wm .lk{display:inline-flex;align-items:flex-start}.wm .tm{font:500 .3em/1 var(--fb);color:var(--muted);margin-left:.3em}
+  .eyebrow{font:700 14px/1 var(--fm);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}
+  .tag{display:inline-block;font:700 13px/1 var(--fm);letter-spacing:.08em;text-transform:uppercase;padding:8px 11px;border-radius:7px;background:var(--gold-soft);color:var(--gold-ink);white-space:nowrap}
+  .tag.ink{background:var(--ink);color:var(--paper)}
+  .mono{font-family:var(--fm);font-variant-numeric:tabular-nums}
+  .y{color:var(--gold-ink)}
+  em{font-style:normal;color:var(--gold-ink)}
+
+  /* En-tête de slide */
+  .hd{display:flex;align-items:center;gap:28px;padding:56px 96px 0;position:relative;z-index:3}
+  .hd .sep{width:1px;height:46px;background:var(--line)}
+  .hd h2{font:800 44px/1.1 var(--fd);letter-spacing:-.02em;color:var(--ink)}
+  .hd .num{margin-left:auto;font:700 18px var(--fm);color:var(--ink);background:var(--gold);border-radius:999px;min-width:54px;height:54px;display:flex;align-items:center;justify-content:center;padding:0 14px;flex:none}
+  .hd .part{margin-left:auto;display:flex;align-items:center;gap:12px;flex:none}
+  .bd{padding:30px 96px 90px;position:relative;z-index:2;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
+  .bd.top{justify-content:flex-start;padding-top:24px}
+  .hd .eyebrow{white-space:nowrap}
+  .lead{font-size:33px;font-weight:500;color:var(--ink-2);line-height:1.35;max-width:1540px}
+  .lead.big{font:700 44px/1.25 var(--fd);color:var(--ink);letter-spacing:-.02em}
+  .note{font-size:21px;color:var(--muted);line-height:1.45}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:28px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 30px 28px;box-shadow:0 1px 2px rgb(21 18 12 / .05),0 10px 30px rgb(21 18 12 / .06)}
+  .card .k{display:flex;align-items:center;gap:10px;font:700 13px var(--fm);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink)}
+  .card .k span{background:var(--gold);color:var(--ink);border-radius:8px;padding:3px 8px;letter-spacing:0}
+  .card .tt{font:700 26px/1.2 var(--fd);color:var(--ink);margin-top:16px;letter-spacing:-.01em}
+  .card .dd{font-size:19px;color:var(--ink-2);margin-top:10px;line-height:1.42}
+  .card.ink{background:var(--ink);color:var(--paper);border-color:var(--ink)}.card.ink .tt{color:var(--paper)}.card.ink .dd{color:#CFC7B2}.card.ink .k{color:var(--gold)}
+  .card.gold{background:var(--gold-soft);border-color:var(--gold-deep)}
+  .big{font:800 88px/1 var(--fm);letter-spacing:-.04em;color:var(--ink)}
+  .big small{font:600 24px/1 var(--fb);color:var(--muted);letter-spacing:0;margin-left:10px}
+  .chips{display:flex;gap:18px}.chip{flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;text-align:center}
+  .chip .n{font:800 50px/1 var(--fm);color:var(--ink);letter-spacing:-.04em;white-space:nowrap}.chip .l{font-size:19px;color:var(--ink-2);margin-top:12px;font-weight:500}
+  .sigline{display:flex;align-items:flex-end;gap:14px;margin-top:22px;color:var(--muted);font:500 14px var(--fm)}.sigline i{flex:1;border-bottom:2px dotted var(--line);height:1px}.sigline b{color:var(--gold-deep);font-size:22px;line-height:.6}
+  .seal{position:absolute;width:210px;height:210px;transform:rotate(-9deg);pointer-events:none}
+  .seal text{font-family:var(--fm)}
+  .contract{padding-left:18px;border-left:4px solid var(--gold);font-style:italic;color:var(--ink-2);font-size:20px;line-height:1.45}
+
+  /* Couverture / fin / pauses */
+  .cover.active,.cta.active,.pause.active{display:flex}
+  .cover,.cta,.pause{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 160px}
+  .cover h1{margin-top:52px;font:800 74px/1.08 var(--fd);letter-spacing:-.03em;max-width:1500px;color:var(--ink)}
+  .cover .sub{margin-top:28px;font-size:28px;color:var(--ink-2);max-width:1100px;line-height:1.4}
+  .cover .foot{position:absolute;bottom:60px;font:500 14px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .cta h1{font:800 92px/1.05 var(--fd);letter-spacing:-.03em;max-width:1500px;color:var(--ink)}
+  .cta .sub{margin-top:30px;font-size:27px;color:var(--ink-2);max-width:1150px;line-height:1.45}
+  .pause h1{font:800 96px/1.05 var(--fd);letter-spacing:-.03em;max-width:1500px;color:var(--ink)}
+  .pause .sub{margin-top:30px;font-size:30px;color:var(--ink-2);max-width:1100px;line-height:1.45}
+  .pause .four{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:70px;width:1500px}
+  .pause .four div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;text-align:left}
+  .pause .four b{display:block;font:700 12px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:10px}
+  .pause .four span{font-size:18px;color:var(--ink-2);line-height:1.4}
+
+  /* Plan de l'appel / du pitch */
+  .plan{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .plan .p{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:38px 34px;min-height:380px;position:relative}
+  .plan .p .n{font:800 92px/1 var(--fm);color:var(--gold-deep);letter-spacing:-.05em}
+  .plan .p .tt{font:800 34px/1.15 var(--fd);margin-top:22px;letter-spacing:-.02em}
+  .plan .p .dd{font-size:21px;color:var(--ink-2);margin-top:14px;line-height:1.42}
+  .plan .p.ink{background:var(--ink);color:var(--paper);border-color:var(--ink)}.plan .p.ink .dd{color:#CFC7B2}.plan .p.ink .n{color:var(--gold)}
+
+  /* Récap : champs que le closer remplit en direct */
+  .recap{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 26px}
+  .fld{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start}
+  .fld .lb{font:700 12px var(--fm);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink);padding-top:6px;line-height:1.4}
+  .fld .fill{min-height:34px;font-size:21px;line-height:1.35;color:var(--ink);outline:none;border-bottom:2px dotted var(--line);padding:2px 0 6px}
+  .fld .fill:focus{border-bottom-color:var(--gold-deep)}
+  .fld .fill:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic}
+  .fld.ink{background:var(--ink);border-color:var(--ink)}.fld.ink .lb{color:var(--gold)}.fld.ink .fill{color:var(--paper);border-bottom-color:#3a3324}.fld.ink .fill:empty::before{color:#9A917B}
+
+  /* Lettres du système, rangées sous leurs piliers */
+  .pillars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px}
+  .pillar{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 22px}
+  .pillar .ph{font:700 13px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+  .pillar .pt{font:800 30px/1.1 var(--fd);letter-spacing:-.02em;margin-top:8px}
+  .pillar .pd{font-size:17.5px;color:var(--ink-2);margin-top:8px;line-height:1.4;min-height:72px}
+  .letters2{display:grid;gap:12px;margin-top:18px}
+  .letter{display:flex;gap:16px;align-items:flex-start;background:var(--sunk);border-radius:14px;padding:16px 16px}
+  .letter .L{flex:none;display:grid;place-items:center;width:58px;height:64px;border:4px solid var(--ink);font:800 38px var(--fd);color:var(--ink);background:var(--card)}
+  .letter.t .L{background:var(--gold);border-color:var(--gold)}
+  .letter .tt{font:700 21px/1.15 var(--fd);letter-spacing:-.01em}
+  .letter .dd{font-size:16px;color:var(--ink-2);margin-top:5px;line-height:1.38}
+
+  /* Équipe et preuves */
+  .team{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 30px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .tcard .ph{width:150px;height:150px;border-radius:999px;object-fit:cover;border:4px solid var(--paper);box-shadow:0 0 0 2px var(--line),0 14px 36px rgb(21 18 12 / .14)}
+  .tcard .nm{font:800 32px/1 var(--fd);margin-top:22px;letter-spacing:-.02em}
+  .tcard .rl{margin-top:12px}.tcard .ds{font-size:19px;color:var(--ink-2);line-height:1.42;margin-top:16px}
+  .tcard .st{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .tcard .st b{font:700 15px var(--fm);background:var(--sunk);border-radius:8px;padding:7px 10px;color:var(--ink)}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 20px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;min-height:520px}
+  .pcard .phs{display:flex;justify-content:center}.pcard .ph{width:104px;height:104px;border-radius:999px;object-fit:cover;border:4px solid var(--paper);box-shadow:0 0 0 2px var(--line)}
+  .pcard .phs .ph+.ph{margin-left:-24px}
+  .pcard .nm{font:800 21px/1.15 var(--fd);margin-top:16px;letter-spacing:-.01em}.pcard .city{margin-top:6px;font:700 12px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink)}
+  .pcard .ba{margin-top:16px;width:100%;text-align:left;display:grid;gap:9px}.pcard .ba div{font-size:15.5px;color:var(--ink-2);line-height:1.35;padding-left:12px;border-left:3px solid var(--line)}
+  .pcard .ba b{display:block;font:700 11px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}.pcard .ba div.now{border-color:var(--gold-deep);color:var(--ink)}.pcard .ba div.now b{color:var(--gold-ink)}
+  .pcard .q{margin-top:auto;padding-top:14px;font-size:15.5px;line-height:1.35;color:var(--ink-2);font-style:italic}
+  .pcard .tv{margin-top:8px;font:700 11px var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .pcard .nb{font:800 44px/1 var(--fm);letter-spacing:-.04em;margin-top:14px}.pcard .nb small{display:block;font:700 11px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  .bestof{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:stretch}
+  .video{position:relative;background:var(--ink);border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:620px}
+  .video video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  .video .ph{position:relative;z-index:2;text-align:center;color:var(--paper);padding:40px}
+  .video .ph .pl{width:110px;height:110px;border-radius:999px;background:var(--gold);display:grid;place-items:center;margin:0 auto 26px;font-size:44px;color:var(--ink)}
+  .video .ph .t{font:800 36px/1.15 var(--fd);letter-spacing:-.02em}.video .ph .s{font-size:20px;color:#CFC7B2;margin-top:12px;line-height:1.4}
+  .wit{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .w{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+  .w .ph{width:62px;height:62px;border-radius:999px;object-fit:cover;flex:none;border:3px solid var(--paper);box-shadow:0 0 0 2px var(--line)}
+  .w .nm{font:700 19px/1.15 var(--fd)}.w .cz{font:700 11px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink);margin-top:4px}
+  .w .nb{margin-left:auto;font:800 30px/1 var(--fm);letter-spacing:-.04em;white-space:nowrap}.w .nb small{display:block;font:700 10px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:5px;text-align:right}
+
+  /* Entonnoir du simulateur */
+  .funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch}
+  .fstep{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 26px;text-align:center;margin-right:28px}
+  .fstep:last-child{margin-right:0;background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .fstep::after{content:"→";position:absolute;right:-24px;top:50%;transform:translateY(-50%);font-size:28px;color:var(--muted)}.fstep:last-child::after{content:none}
+  .fstep .n{font:800 60px/1 var(--fm);letter-spacing:-.04em}.fstep .l{font-size:19px;color:var(--ink-2);margin-top:12px}.fstep:last-child .l{color:#CFC7B2}
+  .fstep .s{font:700 12px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:10px}.fstep:last-child .s{color:var(--gold)}
+  .val{margin-top:26px;display:flex;align-items:center;gap:24px;padding:24px 30px;border-radius:18px;background:var(--ink);color:var(--paper)}
+  .val .big{color:var(--gold);font-size:64px;white-space:nowrap;flex:none}.val .tx{font-size:24px;line-height:1.35;color:#E6DEC8}
+
+  /* Chronologie */
+  .tl{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .tl .ph{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 24px;min-height:440px}
+  .tl .when{font:700 13px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+  .tl .tt{font:700 27px/1.15 var(--fd);margin-top:10px;letter-spacing:-.01em}
+  .tl ul{list-style:none;margin-top:16px;display:grid;gap:10px}.tl li{position:relative;padding-left:22px;font-size:18.5px;color:var(--ink-2);line-height:1.35}.tl li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--gold-deep)}
+  .tl li b{color:var(--ink)}
+  .tl .who{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font:700 12px var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:var(--gold-soft);border-radius:8px;padding:7px 10px}
+  .tl .who img{width:28px;height:28px;border-radius:999px;object-fit:cover}
+
+  /* Pile de valeur (prix avec contraste) */
+  .stack{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:start}
+  .lines{display:grid;gap:5px}
+  .ln{display:grid;grid-template-columns:1fr 150px;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 16px}
+  .ln .t{font-size:17.5px;line-height:1.25;color:var(--ink)}.ln .t small{display:block;font:600 11px var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:1px}
+  .ln .v{font:700 20px var(--fm);text-align:right;color:var(--ink-2);white-space:nowrap}
+  .total{display:flex;align-items:baseline;justify-content:space-between;margin-top:8px;padding:12px 18px;border-radius:12px;background:var(--ink);color:var(--paper)}
+  .total .t{font:700 14px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}.total .vt{font:800 44px/1 var(--fm);letter-spacing:-.04em;color:var(--gold)}
+  .pricebox{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 34px 30px;position:relative;min-height:560px;display:flex;flex-direction:column;box-shadow:0 1px 2px rgb(21 18 12 / .05),0 10px 30px rgb(21 18 12 / .06)}
+  .pricebox .nope{display:flex;flex-direction:column;gap:10px}
+  .pricebox .nope div{font:700 40px/1 var(--fm);letter-spacing:-.03em;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--bad);text-decoration-thickness:4px}
+  .pricebox .yes{margin-top:auto}
+  .pricebox .yes .lb{font:700 13px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+  .pricebox .yes .v{font:800 96px/1 var(--fm);letter-spacing:-.05em;color:var(--ink);margin-top:10px}.pricebox .yes .v small{font:600 26px var(--fb);color:var(--muted);letter-spacing:0;margin-left:8px}
+  .pricebox .yes .dd{font-size:20px;color:var(--ink-2);margin-top:12px;line-height:1.4}
+  .pricebox .seal{right:50px;bottom:-250px;width:210px;height:210px}
+
+  /* Trois façons de payer */
+  .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .price{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px 30px;position:relative}
+  .price.hi{border-color:var(--gold-deep);background:var(--gold-soft)}
+  .price .nm{font:700 15px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+  .price .v{font:800 58px/1 var(--fm);letter-spacing:-.04em;margin-top:18px}.price .v small{font:600 20px var(--fb);color:var(--muted);letter-spacing:0;margin-left:8px}
+  .price .dd{font-size:19px;color:var(--ink-2);margin-top:14px;line-height:1.42}
+  .price ul{margin-top:16px;padding-left:20px;font-size:18px;color:var(--ink-2);line-height:1.55}.price li::marker{color:var(--gold-deep)}
+
+  /* Garanties */
+  .gar{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:start}
+  .pal{display:flex;gap:22px;align-items:flex-start;padding:22px 0;border-bottom:1px solid var(--line)}
+  .pal:last-child{border-bottom:0}
+  .pal .d{flex:none;width:118px;text-align:center;font:800 42px/1 var(--fm);color:var(--ink);letter-spacing:-.03em}.pal .d small{display:block;font:700 12px var(--fm);letter-spacing:.1em;color:var(--muted);margin-top:6px}
+  .pal .tt{font:700 27px/1.2 var(--fd);letter-spacing:-.01em}.pal .dd{font-size:19px;color:var(--ink-2);margin-top:6px;line-height:1.4}
+  .paper{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:46px 44px 160px;box-shadow:0 20px 50px rgb(21 18 12 / .12);transform:rotate(1.2deg)}
+  .paper .ln2{height:11px;border-radius:6px;background:var(--sunk);margin:14px 0}.paper .ln2.t{height:18px;width:62%;background:var(--line)}.paper .ln2.s{width:74%}.paper .ln2.xs{width:46%}
+  .paper .seal{right:30px;bottom:26px}
+
+  /* Conditions */
+  .conds{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .cond{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+  .cond .ck{flex:none;width:34px;height:34px;border-radius:9px;border:3px solid var(--ink);display:grid;place-items:center;font:800 18px var(--fm)}
+  .cond .tt{font:700 22px/1.2 var(--fd)}.cond .dd{font-size:17px;color:var(--ink-2);margin-top:6px;line-height:1.4}
+
+  /* Échelle de certitude */
+  .scale{display:grid;grid-template-columns:repeat(10,1fr);gap:14px;margin-top:50px}
+  .scale button{height:150px;border-radius:18px;border:2px solid var(--line);background:var(--card);font:800 54px var(--fm);color:var(--ink);cursor:pointer;transition:all .2s;letter-spacing:-.04em}
+  .scale button:hover{border-color:var(--gold-deep)}
+  .scale button.on{background:var(--gold);border-color:var(--gold);transform:translateY(-10px);box-shadow:0 18px 40px rgb(21 18 12 / .15)}
+  .scale button.lo.on{background:var(--sunk);border-color:var(--ink)}
+  .verdict{margin-top:40px;min-height:120px;font:700 34px/1.3 var(--fd);letter-spacing:-.02em;color:var(--ink);text-align:center;padding:0 160px}
+  .verdict em{color:var(--gold-ink)}
+
+  /* Oui / non */
+  .yn{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:40px}
+  .yn .o{border-radius:24px;padding:44px 40px;min-height:420px}
+  .yn .o.oui{background:var(--ink);color:var(--paper)}.yn .o.non{background:var(--card);border:1px solid var(--line)}
+  .yn .o .h{font:800 64px/1 var(--fd);letter-spacing:-.03em}.yn .o.oui .h{color:var(--gold)}
+  .yn .o ul{list-style:none;margin-top:28px;display:grid;gap:14px}.yn .o li{position:relative;padding-left:30px;font-size:22px;line-height:1.4}.yn .o.oui li{color:#E6DEC8}.yn .o.non li{color:var(--ink-2)}
+  .yn .o li::before{content:"";position:absolute;left:0;top:12px;width:12px;height:12px;border-radius:50%;background:var(--gold-deep)}
+
+  /* Objections */
+  .obj{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .ob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+  .ob .q{font:700 22px/1.25 var(--fd);letter-spacing:-.01em;color:var(--ink)}
+  .ob .a{font-size:17.5px;color:var(--ink-2);margin-top:12px;line-height:1.42;padding-left:14px;border-left:3px solid var(--gold)}
+
+  /* Navigation */
+  .hud{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:50}
+  .dots{display:flex;gap:7px}.dot{width:9px;height:9px;border-radius:999px;background:#CFC7B2;cursor:pointer;transition:all .2s}.dot.on{background:var(--gold-deep);width:26px}
+  .counter{font:600 13px var(--fm);color:var(--muted);min-width:56px;text-align:center}
+  .arrow{width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .arrow:hover{background:var(--gold);border-color:var(--gold)}
+  .arrow.nb{font:700 12px var(--fm);width:auto;padding:0 12px;letter-spacing:.08em}
+
+  /* Tiroir de notes du closer (touche N) */
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:520px;background:var(--card);border-left:1px solid var(--line);box-shadow:-20px 0 60px rgb(21 18 12 / .18);z-index:60;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+  .drawer.open{transform:none}
+  .drawer .dh{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+  .drawer .dh .eyebrow{font-size:11px}.drawer .dh h3{font:800 18px/1.1 var(--fd);letter-spacing:-.01em}
+  .drawer .dh button{margin-left:auto;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:6px 10px;font:700 11px var(--fm);cursor:pointer;letter-spacing:.08em}
+  .drawer .dc{padding:18px 22px 40px;overflow:auto;font-size:15px;line-height:1.5;color:var(--ink-2)}
+  .drawer .dc h4,.doc h4{font:700 11px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);margin:18px 0 8px}
+  .drawer .dc h4:first-child{margin-top:0}
+  .drawer .dc p,.doc p{margin:0 0 10px}
+  .drawer .dc q,.doc q{quotes:"« " " »";display:block;padding:10px 14px;margin:0 0 10px;background:var(--paper);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;color:var(--ink);font-style:italic}
+  .drawer .dc q::before,.doc q::before{content:open-quote}.drawer .dc q::after,.doc q::after{content:close-quote}
+  .drawer .dc ul,.doc ul{padding-left:18px;margin:0 0 10px}.drawer .dc li,.doc li{margin-bottom:5px}
+  .drawer .dc .rule,.doc .rule{background:var(--gold-soft);color:var(--gold-ink);border-radius:10px;padding:10px 14px;margin:0 0 10px;font-weight:600}
+  .drawer .dc b,.doc b{color:var(--ink)}
+
+  /* Mode document (?script=1) : le script complet, lisible et imprimable */
+  body.docmode{overflow:auto;background:var(--paper)}
+  body.docmode .deck,body.docmode .hud,body.docmode .drawer{display:none}
+  .doc{display:none;max-width:860px;margin:0 auto;padding:60px 28px 120px;color:var(--ink-2);font-size:17px;line-height:1.55}
+  body.docmode .doc{display:block}
+  .doc h1{font:800 44px/1.1 var(--fd);letter-spacing:-.03em;color:var(--ink);margin:18px 0 10px}
+  .doc .intro{font-size:19px;color:var(--ink-2);margin-bottom:34px}
+  .doc h2{font:800 28px/1.15 var(--fd);letter-spacing:-.02em;color:var(--ink);margin:46px 0 14px;padding-top:22px;border-top:1px solid var(--line);display:flex;gap:14px;align-items:baseline}
+  .doc h2 small{font:700 12px var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+  .doc .slref{font:600 12px var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  @media print{html,body.docmode{background:#fff!important}.doc{max-width:none;padding:0}.doc h2{break-before:auto}.doc q,.doc .rule{break-inside:avoid}}
+
+  /* v3 : six maillons en ligne, et la carte de repli (touche R) */
+  .letters{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+  .letter6{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px 24px;box-shadow:0 1px 2px rgb(21 18 12 / .05),0 10px 30px rgb(21 18 12 / .06)}
+  .letter6 .L{display:grid;place-items:center;width:84px;height:92px;border:4px solid var(--ink);font:800 56px var(--fd);color:var(--ink)}
+  .letter6.t .L{background:var(--gold);border-color:var(--gold)}
+  .letter6 .tt{font:700 24px/1.15 var(--fd);margin-top:20px;letter-spacing:-.01em}
+  .letter6 .dd{font-size:16.5px;color:var(--ink-2);margin-top:10px;line-height:1.42}
+  .prices{grid-template-columns:repeat(2,1fr)}.prices.three{grid-template-columns:repeat(3,1fr)}
+  .price.repli{display:none;border-style:dashed}.price.repli.on{display:block}
+  .cond .dd{line-height:1.38}
+
+  /* v4 : repères visuels (mots-clés) et personnalisation par conciergerie */
+  .kw{display:flex;flex-wrap:wrap;gap:12px}.kw span{font:600 18px var(--fb);color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:12px 20px}
+  .pause .four{display:none}
+  .ob .a{font:600 16px var(--fm);letter-spacing:0;color:var(--ink-2)}
+  .plogo{display:none;height:44px;max-width:170px;object-fit:contain}
+  .hd .plogo.hl{margin-left:18px;flex:none}
+  .cover .for{display:none;align-items:center;gap:22px;margin-top:36px;padding:18px 28px;background:var(--card);border:1px solid var(--line);border-radius:18px;text-align:left}
+  .cover .for .plogo{height:64px;max-width:220px}
+  .cover .for .pname{font:800 30px/1.1 var(--fd);letter-spacing:-.02em;color:var(--ink)}.cover .for .pcity{font:600 13px var(--fm);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  :root{--marque:#FFD51E;--marque-text:#7A5A00;--marque-on:#15120C;--marque-soft:#FFF5CC}
+  html.perso .hd .num{background:var(--marque);color:var(--marque-on)}
+  html.perso em{color:var(--marque-text)}
+  html.perso .eyebrow,html.perso .card .k,html.perso .tl .when,html.perso .price .nm,html.perso .pcard .city,html.perso .w .cz,html.perso .fld .lb,html.perso .plan .p .n,html.perso .pal .d,html.perso .verdict em{color:var(--marque-text)}
+  html.perso .card.ink .k,html.perso .fld.ink .lb,html.perso .plan .p.ink .n,html.perso .tl .ph.ink .when{color:var(--gold)}
+  html.perso .card .k span{background:var(--marque);color:var(--marque-on)}
+  html.perso .tag{background:var(--marque-soft);color:var(--marque-text)}
+  html.perso .tl li::before,html.perso .yn .o li::before,html.perso .dot.on{background:var(--marque)}
+  html.perso .scale button.on{background:var(--marque);border-color:var(--marque);color:var(--marque-on)}
+  html.perso .price.hi{border-color:var(--marque);background:var(--marque-soft)}
+  html.perso .card.gold{background:var(--marque-soft);border-color:var(--marque)}
+  html.perso .cond .ck{border-color:var(--marque-text)}
+  html.perso .fld .fill:focus{border-bottom-color:var(--marque)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="sceau" viewBox="0 0 200 200"><path id="arc" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/><circle cx="100" cy="100" r="96" fill="#FFD51E"/><circle cx="100" cy="100" r="88" fill="none" stroke="#15120C" stroke-width="2"/><circle cx="100" cy="100" r="56" fill="none" stroke="#15120C" stroke-width="2"/><text font-size="12.5" font-weight="700" fill="#15120C" letter-spacing="2.2"><textPath href="#arc">ÉCRIT DANS LE CONTRAT · SYSTÈME M.A.N.D.A.T. ·</textPath></text><text x="100" y="118" text-anchor="middle" font-family="Bricolage Grotesque, system-ui, sans-serif" font-size="58" font-weight="800" fill="#15120C">M</text><text x="100" y="140" text-anchor="middle" font-size="9" font-weight="700" fill="#15120C" letter-spacing="2">12 MANDATS · 6 MOIS</text></symbol>
+</defs></svg>
+
+<script id="perso" type="application/json"></script>
+<div class="deck" id="deck">
+
+  <!-- 1. COUVERTURE -->
+  <section class="slide cover" data-title="Couverture">
+    <svg class="seal" style="right:120px;top:100px;width:260px;height:260px"><use href="#sceau"/></svg>
+    <div class="wm" style="font-size:96px"><span class="sys">Système</span><span class="lk"><span class="boxes"><span class="b">M</span><span class="dot"></span><span class="b">A</span><span class="dot"></span><span class="b">N</span><span class="dot"></span><span class="b">D</span><span class="dot"></span><span class="b">A</span><span class="dot"></span><span class="b">T</span></span><span class="tm">™</span></span></div>
+    <h1><em>12 nouveaux mandats signés</em> en 6 mois, sans démarcher.</h1>
+    <div class="sub">Et une conciergerie qui tourne sans toi.</div>
+    <div class="for"><img class="plogo" alt=""><div><div class="eyebrow">Préparé pour</div><div class="pname"></div><div class="pcity"></div></div></div>
+    <div class="foot">Présentation de l'appel · Concierge Elite · document commercial</div>
+    <aside class="notes" data-h="Avant le call et cadrage">
+      <h4>Avant le call (process du matin)</h4>
+      <p>Objectif 1 : le prospect a vu la vidéo avant appel (job de la setteuse, et le tien si ce n'est pas fait). Objectif 2 : il est à l'heure. À chaque étape du tunnel, le gérant est prévenu qu'il va échanger avec <b>[prénom closer]</b>, de l'équipe Concierge Elite (Martin, Reda, Julien).</p>
+      <ul><li>Ouvre ton agenda Google, contacte chaque lead dans l'ordre de passage : appel WhatsApp, 5 sonneries.</li><li>Pas de réponse : <q>Hello, c'est bien [prénom] ? Je m'appelle [ton prénom], je bosse avec Martin, Reda et Julien chez Concierge Elite. Ton appel avec nous est à [heure]. Tu es dispo 5 minutes ?</q></li><li>Toujours rien : rappelle 3 fois, 5 sonneries. Un gérant est souvent sur le terrain, il faut persister. Puis : <q>Je dois absolument t'avoir avant midi (heure française), sinon je devrai libérer ton créneau. Ta conciergerie a l'air pile dans ce qu'on accompagne, rappelle-moi vite. [Ton prénom], équipe Concierge Elite.</q></li><li>Eu avant 12 h : tu gardes le call et tu insistes pour qu'il regarde la vidéo. Pas eu : tu annules et tu libères le créneau.</li></ul>
+      <h4>01 · Cadrage</h4>
+      <p>Vérifie son, caméra, wifi, lieu calme. Un gérant appelle souvent depuis sa voiture ou entre deux check-in : demande-lui de se poser 45 minutes. Bonjour, comment ça va, un compliment spontané ou un point commun visuel. Énergie : <q>Je suis en pleine forme aujourd'hui, super content de t'avoir.</q></p>
+      <q>Dans cet appel [prénom], mon but c'est de comprendre comment on peut t'aider. Si tu as réservé, c'est sûrement que tes nouveaux mandats ne rentrent pas aussi régulièrement que tu voudrais, ou que tu es sous l'eau dans l'opérationnel. On va voir tout ça ensemble. Je vais te parler franco, comme à un ami. J'attends juste que tu sois aussi honnête que moi, comme ça tu repars avec un maximum de valeur.</q>
+      <p>Puis la slide suivante pour annoncer les 3 parties.</p>
+    </aside>
+  </section>
+
+  <!-- 2. LE CADRE DE L'APPEL -->
+  <section class="slide" data-title="Le cadre de l'appel">
+    <div class="hd"><span class="eyebrow">Cet appel</span><div class="sep"></div><h2>Trois parties, <em>45 minutes</em>.</h2><div class="num">02</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="plan">
+        <div class="p step"><div class="n mono">1</div><div class="tt">Ta conciergerie</div><div class="dd">Logements · secteur · mandats · opérationnel</div></div>
+        <div class="p step"><div class="n mono">2</div><div class="tt">Le plan d'action</div><div class="dd">12 mandats en 6 mois, sans démarcher. Une conciergerie qui tourne sans toi.</div></div>
+        <div class="p step ink"><div class="n mono">3</div><div class="tt">Ensemble, ou seul</div><div class="dd">Si le plan te plaît, on le met en place. Sinon, il est à toi.</div></div>
+      </div>
+      <div class="kw step" style="margin-top:34px"><span>✎ Note tes questions</span><span>45 min au calme</span><span>Franco, comme à un ami</span></div>
+    </div>
+    <aside class="notes" data-h="01 · Cadrage, les 3 parties">
+      <q>L'appel se passe en 3 parties. 1. Je te pose des questions sur ta conciergerie, pour voir si ton profil correspond aux gérants qu'on a déjà accompagnés. 2. Je te présente le plan d'action exact pour signer 12 nouveaux mandats en 6 mois sans démarcher, avec une conciergerie qui tourne sans toi. 3. Si le plan te plaît, je t'explique comment on travaille avec nos clients. Sinon, tu pourras l'appliquer seul de ton côté. Ça te va ?</q>
+      <div class="rule">Attends le « oui » avant de couper le partage d'écran et de passer aux questions.</div>
+    </aside>
+  </section>
+
+  <!-- 3. TA SITUATION (récap, champs à remplir ou pré-remplis) -->
+  <section class="slide" data-title="Ta situation">
+    <div class="hd"><span class="eyebrow">Partie 1 · Ta situation</span><div class="sep"></div><h2>Si je résume, <span class="pfirst"></span><em>tu m'as dit que…</em></h2><div class="num">03</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="recap">
+        <div class="fld step"><div class="lb">Logements, secteur, commission</div><div class="fill" contenteditable="true" data-k="situation" data-ph="Nombre et type de logements, ville, commission, ce qu'un logement rapporte par mois"></div></div>
+        <div class="fld step"><div class="lb">D'où viennent tes mandats</div><div class="fill" contenteditable="true" data-k="acquisition" data-ph="Bouche-à-oreille, Leboncoin, agences, flyers, pubs… et leur irrégularité"></div></div>
+        <div class="fld step"><div class="lb">Ton opérationnel</div><div class="fill" contenteditable="true" data-k="operationnel" data-ph="Heures par semaine : messages, ménage, check-in, urgences ; outil utilisé"></div></div>
+        <div class="fld step"><div class="lb">Depuis combien de temps tu plafonnes</div><div class="fill" contenteditable="true" data-k="plafond" data-ph="Autour de [X] logements depuis…"></div></div>
+        <div class="fld step"><div class="lb">Ta douleur et ton pourquoi</div><div class="fill" contenteditable="true" data-k="douleur" data-ph="Famille, sommeil, le téléphone du dimanche soir ; ce que ça coûte chaque mois"></div></div>
+        <div class="fld step"><div class="lb">Ton objectif à 6 mois</div><div class="fill" contenteditable="true" data-k="objectif" data-ph="Nombre de logements, chiffre d'affaires mensuel visé"></div></div>
+        <div class="fld step"><div class="lb">Prêt à démarrer maintenant</div><div class="fill" contenteditable="true" data-k="demarrage" data-ph="Aucune contrainte de temps, le plus tôt possible"></div></div>
+        <div class="fld step ink"><div class="lb">Trésorerie disponible</div><div class="fill" contenteditable="true" data-k="tresorerie" data-ph="Tous comptes confondus, perso et pro"></div></div>
+      </div>
+      <p class="note step" style="margin-top:26px">Ses mots exacts. Les cases se remplissent en direct : clique et écris.</p>
+    </div>
+    <aside class="notes" data-h="02 → 04 · Questionnement, trésorerie, récap">
+      <h4>Sa problématique</h4>
+      <q>Aujourd'hui, quelle est ta principale difficulté dans ta conciergerie ? Qu'est-ce qui t'empêche de grossir ?</q>
+      <h4>Sa situation</h4>
+      <ul><li><q>Tu gères combien de logements aujourd'hui ? Quel type de biens ?</q></li><li><q>Tu es sur quelle ville ou quel secteur ?</q></li><li><q>Tu es seul ou à plusieurs ? Le ménage, c'est toi ou tu sous-traites ?</q></li><li><q>Ta commission, c'est combien ? Un logement te rapporte en moyenne combien par mois ?</q></li><li><q>Tu as lancé depuis combien de temps ?</q></li></ul>
+      <h4>Son acquisition actuelle</h4>
+      <ul><li><q>Tes nouveaux mandats, ils viennent d'où aujourd'hui ? Bouche-à-oreille, Leboncoin, agences, flyers, pubs ?</q></li><li><q>Tu signes combien de nouveaux mandats par mois en moyenne ? C'est régulier, ou un mois 3 puis plus rien pendant 2 mois ?</q></li><li><q>Tu as déjà testé des pubs ou une agence ? Qu'est-ce que ça a donné ?</q></li></ul>
+      <h4>Son opérationnel</h4>
+      <ul><li><q>Concrètement, tu passes combien d'heures par semaine sur les messages voyageurs, le planning ménage, les check-in et les urgences ?</q></li><li><q>Si demain on t'amène 3 nouveaux mandats, tu es capable de les absorber, ou ça te fait exploser ?</q></li><li><q>Tu utilises quel outil de gestion aujourd'hui ?</q></li></ul>
+      <h4>Sa conformité (simplement, sans faire peur)</h4>
+      <q>Tu as la carte G ? Qui encaisse les loyers et qui fixe les prix aujourd'hui, toi ou le propriétaire ?</q>
+      <h4>Depuis combien de temps il plafonne</h4>
+      <q>Ça fait combien de temps que tu es autour de [X] logements ?</q>
+      <h4>Son objectif</h4>
+      <q>Dans 6 mois, tu veux gérer combien de logements ? Et en chiffre d'affaires mensuel, tu vises combien ?</q>
+      <h4>Pourquoi il n'y arrive pas seul</h4>
+      <q>Qu'est-ce qui t'a empêché jusqu'ici d'y arriver par toi-même ?</q>
+      <h4>Le pourquoi et la douleur</h4>
+      <ul><li><q>L'argent c'est un moyen, pas une fin. Tu m'as dit vouloir [objectif]. Perso, qu'est-ce qui fait que tu veux vraiment ça ?</q></li><li><q>Aujourd'hui, ça a quel impact sur ta vie ? Ta famille, ton sommeil, ton téléphone qui sonne le dimanche soir ?</q></li><li><q>Qu'est-ce que ça t'a déjà coûté de ne pas avoir réglé ça plus tôt ?</q></li><li><q>Si tu devais chiffrer ce que ça te coûte chaque mois (mandats qui ne rentrent pas, temps perdu, stress), on parlerait de combien ?</q></li></ul>
+      <h4>Renforcer la douleur</h4>
+      <ul><li><q>Tu te sens comment de plafonner à [X] logements ?</q></li><li><q>Sur une échelle de 1 à 10, tu notes ta situation à combien ? Pourquoi seulement ce chiffre ?</q></li><li><q>Qu'est-ce qui se passe dans 6 mois si rien ne change ?</q></li></ul>
+      <h4>Valider qu'il peut démarrer maintenant</h4>
+      <ul><li><q>Tu as des contraintes de temps, ou tu pourrais lancer le système dès maintenant pour signer tes prochains mandats rapidement ?</q></li><li><q>Donc le plus tôt possible, tu confirmes ?</q></li></ul>
+      <h4>03 · Trésorerie (on veut un chiffre)</h4>
+      <q>Ok [prénom]. Dans notre système, les propriétaires arrivent via des campagnes Meta et Google calibrées sur ton secteur. Le budget pub est payé en direct sur tes comptes, et selon le secteur on parle généralement de quelques centaines d'euros par mois pour viser 3 mandats. On l'affine à l'audit. Pour te proposer un plan réaliste, qui ne te met pas en difficulté, j'ai besoin de connaître ta marge de manœuvre. Sur l'ensemble de tes comptes, perso et pro, tu disposes de combien aujourd'hui ?</q>
+      <p>Chiffre bas ou flou : <q>Je ne te parle pas de ce que tu veux mettre en pub. Je parle de ta trésorerie totale, tous comptes confondus : c'est sur cette base qu'on calibre le budget et le rythme de lancement. Tu es plutôt autour de combien ?</q></p>
+      <div class="rule">Règle d'or : tu ne passes pas à la suite tant que tu n'as pas le chiffre.</div>
+      <h4>04 · Récap</h4>
+      <q>Ok [prénom], si je résume, tu m'as dit que…</q>
+      <p>Les 8 cases de la slide, dans l'ordre, avec ses mots exacts. Si le deck a été personnalisé avant l'appel, elles sont déjà remplies : relis-les avec lui.</p>
+    </aside>
+  </section>
+
+  <!-- 4. TÉMOIGNAGES (partage d'écran) -->
+  <section class="slide" data-title="Résultats de gérants accompagnés">
+    <div class="hd"><span class="eyebrow">Partie 1 · La preuve d'abord</span><div class="sep"></div><h2>Ils ont <em>le même profil que toi</em>.</h2><div class="num">04</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="bestof">
+        <div class="video step" id="bestof">
+          <video id="bov" playsinline preload="metadata" style="display:none"></video>
+          <div class="ph"><div class="pl">▶</div><div class="t">Best-of des gérants accompagnés</div><div class="s">2 min 27 · sans prospecter</div></div>
+        </div>
+        <div class="wit">
+          <div class="w step"><img class="ph" src="assets/preuves/hostimo-mathieu.jpg" alt=""><div><div class="nm">Mathieu · Hostimo</div><div class="cz">Valence</div></div><div class="nb">100+<small>logements</small></div></div>
+          <div class="w step"><img class="ph" src="assets/preuves/hostlux-reda.jpg" alt=""><div><div class="nm">Reda · Hostlux</div><div class="cz">Marrakech</div></div><div class="nb">70+<small>logements</small></div></div>
+          <div class="w step"><img class="ph" src="assets/preuves/rhenane-corentin.jpg" alt=""><div><div class="nm">Corentin &amp; Thibault · Rhénane</div><div class="cz">Strasbourg</div></div><div class="nb">60+<small>logements</small></div></div>
+          <div class="w step"><img class="ph" src="assets/preuves/simeo-leo.jpg" alt=""><div><div class="nm">Léo &amp; Simon · Simeo</div><div class="cz">Vendée</div></div><div class="nb">60+<small>logements</small></div></div>
+          <div class="w step"><img class="ph" src="assets/preuves/cote-nacre-david.jpg" alt=""><div><div class="nm">David · Côte Nacre</div><div class="cz">Normandie</div></div><div class="nb">40+<small>logements</small></div></div>
+          <div class="w step"><img class="ph" src="assets/julien.jpg" alt=""><div><div class="nm">Julien · Hostelite</div><div class="cz">Casablanca, à distance</div></div><div class="nb">40+<small>logements</small></div></div>
+        </div>
+      </div>
+      <div class="chips step" style="margin-top:26px">
+        <div class="chip"><div class="n">600+</div><div class="l">accompagnés depuis décembre 2023</div></div>
+        <div class="chip"><div class="n">&lt; 10</div><div class="l">demandes de remboursement</div></div>
+        <div class="chip"><div class="n">1 200</div><div class="l">logements gérés par les conciergeries créées par Reda</div></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="05 · Témoignages (partage d'écran)">
+      <q>Avec tout ce que tu m'as dit, je peux te le dire avec certitude : ton profil correspond exactement aux gérants qu'on a accompagnés. Certains étaient même à moins de logements que toi. Je te partage mon écran, regarde.</q>
+      <p>Lance le best-of (élèves à 70+ biens, « comment j'ai trouvé des propriétaires sans prospecter »). Sans la vidéo, déroule les six témoins avec la flèche : un nom, un visage, un nombre de logements.</p>
+    </aside>
+  </section>
+
+  <!-- 5. LE PITCH : 3 PARTIES -->
+  <section class="slide" data-title="Le pitch en 3 parties">
+    <div class="hd"><span class="eyebrow">Partie 2 · Le plan</span><div class="sep"></div><h2>Comment ils ont eu <em>ces résultats</em>.</h2><div class="num">05</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="plan">
+        <div class="p step"><div class="n mono">1</div><div class="tt">Le Système M.A.N.D.A.T.™</div><div class="dd">D'un propriétaire inconnu à un logement en gestion.</div></div>
+        <div class="p step"><div class="n mono">2</div><div class="tt">Jour par jour</div><div class="dd">Tout est fait pour toi. Moteur en place en 7 jours.</div></div>
+        <div class="p step ink"><div class="n mono">3</div><div class="tt">La triple garantie</div><div class="dd">14 jours · 60 jours · 120 jours. Écrite dans le contrat.</div></div>
+      </div>
+      <div class="kw step" style="margin-top:34px"><span>✎ Note tes questions, même les micro-doutes</span><span>On présente une fois, puis on répond à tout</span></div>
+    </div>
+    <aside class="notes" data-h="06 · Le pitch (objectif : 10/10 sur 12 mandats en 6 mois)">
+      <q>Ce que tu viens de voir, c'est un court best-of de nos clients. Avant de te présenter comment ils ont eu ces résultats, un petit disclaimer : des questions vont te venir pendant la présentation. Note-les toutes, même les micro-doutes. On ne présente qu'une fois, et juste après je prends le temps de répondre à chacune. Tu as de quoi noter ? Top, c'est parti.</q>
+      <q>La présentation se fait en 3 parties : 1. Le Système M.A.N.D.A.T., la machine qui transforme un propriétaire inconnu en logement en gestion. 2. Comment on t'accompagne concrètement, jour par jour. 3. Notre triple garantie.</q>
+    </aside>
+  </section>
+
+  <!-- 6. QUI ON EST -->
+  <section class="slide" data-title="Qui on est">
+    <div class="hd"><span class="eyebrow">1 · Le Système M.A.N.D.A.T.</span><div class="sep"></div><h2>D'abord, <em>qui on est</em>.</h2><div class="num">06</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="team">
+        <div class="tcard step"><img class="ph" src="assets/martin.jpg" alt=""><div class="nm">Martin</div><span class="tag rl">Dieppe · 2022</span><div class="ds">Sa conciergerie montée à 30 logements. Les propriétaires viennent à lui.</div><div class="st"><b>30 logements</b><b>600+ accompagnés</b></div></div>
+        <div class="tcard step"><img class="ph" src="assets/preuves/hostlux-reda.jpg" alt=""><div class="nm">Reda</div><span class="tag rl">Maroc · 100 % à distance</span><div class="ds">70 logements en moins d'un an. 120 conciergeries créées depuis.</div><div class="st"><b>70 logements</b><b>1 200 gérés</b></div></div>
+        <div class="tcard step"><img class="ph" src="assets/julien.jpg" alt=""><div class="nm">Julien</div><span class="tag rl">Normandie · Casablanca</span><div class="ds">Une conciergerie structurée à 100+ logements. Créateur de Node.</div><div class="st"><b>100+ logements</b><b>Node · 500 conciergeries</b></div></div>
+      </div>
+      <div class="kw step" style="margin-top:30px"><span>600+ accompagnés à trois</span><span>Le système appliqué à nous avant de le vendre</span><span>Toute la chaîne, du clic au premier séjour</span></div>
+    </div>
+    <aside class="notes" data-h="Partie 1 · Qui on est">
+      <q>D'abord, qui on est. Martin a lancé sa conciergerie à Dieppe et l'a montée à 30 logements. Reda a monté une conciergerie 100 % à distance au Maroc, à 70 logements en moins d'un an. Julien a structuré une conciergerie à plus de 100 logements et a créé Node, le logiciel utilisé par 500 conciergeries. À eux trois, ils ont accompagné plus de 600 personnes.</q>
+      <q>La raison pour laquelle nos clients signent des mandats chaque mois tient en une phrase : on couvre toute la chaîne, du clic du propriétaire jusqu'au ménage du premier séjour.</q>
+    </aside>
+  </section>
+
+  <!-- 7. UN MAILLON QUI CASSE -->
+  <section class="slide" data-title="Il suffit d'un maillon qui casse">
+    <div class="hd"><span class="eyebrow">1 · Le Système M.A.N.D.A.T.</span><div class="sep"></div><h2>Il suffit d'<em>un maillon qui casse</em>.</h2><div class="num">07</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="g2" style="margin-bottom:30px">
+        <div class="card step"><div class="k">Les agences</div><div class="tt">Des leads froids</div><div class="dd">Et tu te débrouilles.</div></div>
+        <div class="card step"><div class="k">Les formations</div><div class="tt">De la théorie</div><div class="dd">Gérer, oui. Faire venir des propriétaires, non.</div></div>
+      </div>
+      <div class="g3">
+        <div class="card step ink"><div class="k"><span>1</span>Acquisition</div><div class="tt">Pas de propriétaires</div><div class="dd">Un mois trois, puis rien.</div></div>
+        <div class="card step ink"><div class="k"><span>2</span>Signature</div><div class="tt">Ils ne signent pas</div><div class="dd">Rappelés le lendemain, offre banale.</div></div>
+        <div class="card step ink"><div class="k"><span>3</span>Absorption</div><div class="tt">Tu exploses</div><div class="dd">Messages, ménages, urgences.</div></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="Partie 1 · Toute la chaîne">
+      <q>Les agences te ramènent des leads froids et te laissent te débrouiller. Les formations te donnent de la théorie. Résultat : soit tu n'as pas de propriétaires, soit tu en as mais ils ne signent pas, soit tu signes et tu exploses sous l'opérationnel. Il suffit d'un maillon qui casse pour que rien ne marche.</q>
+      <p>Enchaîne : <q>M.A.N.D.A.T., c'est 6 maillons.</q></p>
+    </aside>
+  </section>
+
+  <!-- 8. LES 6 MAILLONS -->
+  <section class="slide" data-title="Les 6 maillons M.A.N.D.A.T.">
+    <div class="hd"><span class="eyebrow">1 · Le Système M.A.N.D.A.T.</span><div class="sep"></div><h2>Six <em>maillons</em>.</h2><div class="num">08</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="letters">
+        <div class="letter6 step"><div class="L">M</div><div class="tt">Moteur propriétaires</div><div class="dd">Pubs Meta et Google, calibrées sur ton secteur.</div></div>
+        <div class="letter6 step"><div class="L">A</div><div class="tt">Appel &lt; 1 minute</div><div class="dd">Une setteuse dédiée. RDV booké dans ton agenda.</div></div>
+        <div class="letter6 step"><div class="L">N</div><div class="tt">Node</div><div class="dd">Messages, planning ménage, check-in automatisés.</div></div>
+        <div class="letter6 step"><div class="L">D</div><div class="tt">Délégation</div><div class="dd">Aides-ménagères, city manager à distance, process.</div></div>
+        <div class="letter6 step"><div class="L">A</div><div class="tt">Argumentaire</div><div class="dd">Offre réécrite, script, simulateur, objections.</div></div>
+        <div class="letter6 step t"><div class="L">T</div><div class="tt">Tracking</div><div class="dd">Coût par mandat, chaque semaine.</div></div>
+      </div>
+      <div class="kw step" style="margin-top:30px"><span>Du clic du propriétaire au ménage du premier séjour</span><span>Aucun maillon ne casse</span></div>
+    </div>
+    <aside class="notes" data-h="Partie 1 · Les 6 maillons">
+      <ul><li><q>M, Moteur propriétaires : des campagnes Meta et Google calibrées sur ton secteur, pour capter les propriétaires qui cherchent déjà une conciergerie.</q></li><li><q>A, Appel en moins d'une minute : une setteuse dédiée appelle chaque lead immédiatement et booke le rendez-vous estimation dans ton agenda. Un propriétaire rappelé dans la minute, c'est un propriétaire qui n'a pas encore appelé ton concurrent.</q></li><li><q>N, Node : le logiciel qui automatise ta gestion (messages, planning ménage, check-in), pour absorber les nouveaux biens sans recruter.</q></li><li><q>D, Délégation : des aides-ménagères qualifiées sur le terrain, un city manager à distance pour tout le reste, et des process prêts à l'emploi. Tu ne te déplaces plus.</q></li><li><q>A, Argumentaire de signature : on audite et on réécrit ton offre propriétaire pour qu'elle devienne irrésistible, puis on te donne le script de rendez-vous, le simulateur de revenus et le traitement d'objections, testés sur des centaines de signatures.</q></li><li><q>T, Tracking : reporting chaque semaine, coût par mandat suivi par secteur, et on ajuste chaque semaine.</q></li></ul>
+      <q>C'est clair jusqu'ici [prénom] ? Dis-moi si tu veux que j'aille moins vite pour bien noter tes questions.</q>
+    </aside>
+  </section>
+
+  <!-- 9. PAUSE : QUESTIONS SUR LA MÉTHODE -->
+  <section class="slide pause" data-title="Tes questions sur la méthode">
+    <span class="eyebrow">Fin de la partie 1</span>
+    <h1 style="margin-top:22px">Tes questions <em>sur la méthode</em> ?</h1>
+    <div class="sub">Il n'y a pas de question bête.</div>
+    <aside class="notes" data-h="Traitement des questions, en 4 temps">
+      <q>Vas-y, quelles sont tes questions sur la méthode ?</q>
+      <ol><li><b>Gratifier</b> : <q>Merci, très bonne question, on ne me la pose pas souvent.</q></li><li><b>Clarifier</b> : <q>Pour être sûr de bien comprendre, tu peux me la développer ?</q></li><li><b>Répondre court</b> : <q>C'est exactement le problème qu'avaient certains de nos clients. Ce qu'on a mis en place pour le régler, c'est [X].</q></li><li><b>Justifier</b> : <q>C'est d'ailleurs ce qui leur a permis d'avoir ces résultats.</q></li></ol>
+    </aside>
+  </section>
+
+  <!-- 10. PARTIE 2 : JOUR PAR JOUR -->
+  <section class="slide" data-title="Comment on t'accompagne, jour par jour">
+    <div class="hd"><span class="eyebrow">2 · L'accompagnement</span><div class="sep"></div><h2>Tout est fait pour toi. <em>Moteur en place en 7 jours.</em></h2><div class="num">10</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="tl">
+        <div class="ph step"><div class="when">Jour 0 → 48 h</div><div class="tt">GO</div><ul><li><b>J0</b> · pack juridique (avocate)</li><li><b>24 h</b> · audit de ton secteur</li><li><b>48 h</b> · script, simulateur, objections</li></ul></div>
+        <div class="ph step"><div class="when">Sous 7 jours</div><div class="tt">Le moteur</div><ul><li>Ton <b>offre propriétaire</b> réécrite</li><li>Conformité <b>loi Hoguet</b></li><li><b>Funnel</b> en ligne : pubs, landing, formulaire</li><li><b>Node</b> installé</li><li>Process de délégation</li></ul></div>
+        <div class="ph step"><div class="when">1er lead → 14 jours</div><div class="tt">Tu signes</div><ul><li>Setteuse : appel en <b>&lt; 1 minute</b>, RDV dans ton agenda</li><li>Toi : le RDV, le script, la signature</li><li><b>14 j</b> · aides-ménagères recrutées</li><li>City manager à distance, formé à Node</li></ul></div>
+        <div class="ph step"><div class="when">Chaque semaine · 6 à 12 mois</div><div class="tt">On ajuste</div><ul><li>Reporting, coût par mandat</li><li>WhatsApp privé + appels de validation</li><li>À la fin : <b>autonome</b>, 2 à 3 mandats par mois</li><li>D'autres secteurs, à distance</li></ul></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="Partie 2 · Comment on t'accompagne, jour par jour">
+      <q>Maintenant, le concret. Tout est fait pour toi, de A à Z. Le moteur d'acquisition est en place en 7 jours. Tu es toujours prêt à noter ?</q>
+      <ul><li><q>Jour 0 : tu nous dis GO. Tu reçois le pack juridique rédigé par une avocate : contrat de prestation, CGV, fiche d'information précontractuelle.</q></li><li><q>Sous 24 h : Reda fait l'audit de ton secteur : réglementation, prix moyen, concurrence, coût par lead estimé.</q></li><li><q>Sous 48 h : tu reçois ton script de signature de mandat, le simulateur de revenus propriétaire et le traitement d'objections.</q></li><li><q>Sous 7 jours : Martin et Julien auditent et réécrivent ton offre propriétaire. Martin fait ta mise en conformité loi Hoguet, soit sans carte G avec le bon contrat, soit on t'accompagne sur le dossier carte G : le but, c'est une conciergerie qui peut durer. Ton funnel propriétaires est en ligne : pubs Meta et Google, landing page, formulaire de qualification. Node est installé et paramétré. Tu reçois les process de délégation d'une conciergerie à plus de 100 logements.</q></li><li><q>Dès le premier lead : ta setteuse dédiée appelle chaque propriétaire en moins d'une minute et booke les rendez-vous dans ton agenda. Toi, tu vas au rendez-vous avec ton script et ton simulateur, et tu signes.</q></li><li><q>Sous 14 jours : on recrute tes aides-ménagères qualifiées dans ton secteur. Et selon ton secteur, on recrute ton city manager à distance, qu'on forme à Node. Il prend les voyageurs, le planning ménage, la relation propriétaires. Tu bosses SUR ta conciergerie, plus DEDANS.</q></li><li><q>Chaque semaine : reporting, suivi du coût par mandat, ajustements.</q></li><li><q>En continu, pendant 6 à 12 mois : accès privé WhatsApp avec Martin, Reda et Julien, plus des appels de validation avec eux. Et à la fin, tu repars autonome : un dashboard qui génère et publie tes pubs tout seul, et la stratégie pour signer 2 à 3 mandats par mois dans la durée. Tu peux même ouvrir d'autres secteurs à distance.</q></li></ul>
+    </aside>
+  </section>
+
+  <!-- 11. FAIT POUR TOI -->
+  <section class="slide" data-title="Ce qu'on fait pour toi">
+    <div class="hd"><span class="eyebrow">2 · L'accompagnement</span><div class="sep"></div><h2>De A à Z, <em>pour toi</em>.</h2><div class="num">11</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="g4">
+        <div class="card step"><div class="k"><span>J0</span>Avocate</div><div class="tt">Pack juridique</div><div class="dd">Contrat, CGV, fiche précontractuelle.</div></div>
+        <div class="card step"><div class="k"><span>24 h</span>Reda</div><div class="tt">Audit de ton secteur</div><div class="dd">Réglementation, prix, concurrence, coût par lead.</div></div>
+        <div class="card step"><div class="k"><span>48 h</span>Julien · Martin</div><div class="tt">Script, simulateur, objections</div><div class="dd">Testés sur des centaines de signatures.</div></div>
+        <div class="card step"><div class="k"><span>7 j</span>Martin · Julien</div><div class="tt">Ton offre propriétaire</div><div class="dd">Promesse, commission, garanties, preuves.</div></div>
+        <div class="card step"><div class="k"><span>7 j</span>Martin</div><div class="tt">Conformité loi Hoguet</div><div class="dd">Sans carte G, ou dossier carte G accompagné.</div></div>
+        <div class="card step"><div class="k"><span>7 j</span>Reda</div><div class="tt">Funnel propriétaires</div><div class="dd">Pubs Meta et Google, landing, formulaire → CRM.</div></div>
+        <div class="card step"><div class="k"><span>7 j</span>Julien</div><div class="tt">Node installé</div><div class="dd">Licence, paramétrage, crédits leads.</div></div>
+        <div class="card step"><div class="k"><span>7 j</span>Julien</div><div class="tt">Process de délégation</div><div class="dd">Ceux d'une conciergerie à 100+ logements.</div></div>
+        <div class="card step"><div class="k"><span>Lead</span>Setteuse</div><div class="tt">Appel &lt; 1 minute</div><div class="dd">RDV dans ton agenda. Relance 1 h, 6 h.</div></div>
+        <div class="card step"><div class="k"><span>14 j</span>Reda</div><div class="tt">Aides-ménagères</div><div class="dd">Recrutées dans ton secteur.</div></div>
+        <div class="card step"><div class="k"><span>Secteur</span>Reda</div><div class="tt">City manager à distance</div><div class="dd">Formé à Node. 10 à 20 logements, 300 à 400 € par mois.</div></div>
+        <div class="card step ink"><div class="k"><span>6-12 mois</span>L'équipe</div><div class="tt">WhatsApp privé + validation</div><div class="dd">Martin, Reda, Julien. Reporting hebdo.</div></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="Partie 2 · Fait à ta place, la liste">
+      <p>Récap visuel des 12 livrables, dans l'ordre des délais. Une phrase par carte, ou saute-la si le jour par jour a suffi. Insiste sur l'ordre : <b>l'offre d'abord</b>, les pubs ensuite. Une pub qui envoie des propriétaires sur une offre banale ne signe pas.</p>
+      <p>City manager : <q>Une personne francophone, à distance, qui prend tout ce que tu fais aujourd'hui hors terrain. L'aide-ménagère garde le terrain. Toi, tu bosses SUR ta conciergerie, plus DEDANS.</q></p>
+    </aside>
+  </section>
+
+  <!-- 12. TU REPARS AUTONOME -->
+  <section class="slide" data-title="À la fin, tu repars autonome">
+    <div class="hd"><span class="eyebrow">2 · L'accompagnement</span><div class="sep"></div><h2>À la fin, <em>autonome</em>. Même de nous.</h2><div class="num">12</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="g4">
+        <div class="card step"><div class="k">Dashboard</div><div class="tt">Tes pubs, toutes seules</div><div class="dd">Générées et publiées sans Business Manager.</div></div>
+        <div class="card step"><div class="k">Stratégie</div><div class="tt">2 à 3 mandats par mois</div><div class="dd">20 à 30 par an, dans la durée.</div></div>
+        <div class="card step"><div class="k">Secteurs</div><div class="tt">D'autres villes, à distance</div><div class="dd">Comme Reda et Julien.</div></div>
+        <div class="card step ink"><div class="k">Avec nous</div><div class="tt">WhatsApp + validation</div><div class="dd">Martin, Reda, Julien · 6 à 12 mois.</div></div>
+      </div>
+      <div class="kw step" style="margin-top:30px"><span>Portail mandat.studio</span><span>Reporting hebdo</span><span>City manager</span><span>Communauté des gérants</span></div>
+    </div>
+    <aside class="notes" data-h="Partie 2 · L'autonomie, puis les questions">
+      <q>Tout ça, c'est le minimum pour t'amener à 12 nouveaux mandats en 6 mois. C'est pour ça qu'on le fait. Quelles sont tes questions sur cette partie ? Il n'y a vraiment pas de question bête.</q>
+      <p>Puis la slide pause et le traitement en 4 temps.</p>
+    </aside>
+  </section>
+
+  <!-- 13. PAUSE : QUESTIONS SUR L'ACCOMPAGNEMENT -->
+  <section class="slide pause" data-title="Tes questions sur l'accompagnement">
+    <span class="eyebrow">Fin de la partie 2</span>
+    <h1 style="margin-top:22px">Tes questions <em>sur l'accompagnement</em> ?</h1>
+    <div class="sub">Il n'y a pas de question bête.</div>
+    <aside class="notes" data-h="Questions sur l'accompagnement">
+      <p>Même traitement en 4 temps : gratifier, clarifier, répondre court, justifier.</p>
+    </aside>
+  </section>
+
+  <!-- 14. BÉNÉFICE ÉMOTIONNEL -->
+  <section class="slide" data-title="Concrètement, dans ta vie">
+    <div class="hd"><span class="eyebrow">Concrètement</span><div class="sep"></div><h2>Dans ta vie, <em>ça veut dire quoi</em> ?</h2><div class="num">14</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="g2">
+        <div style="display:grid;gap:16px">
+          <div class="card step"><div class="k">Chaque début de mois</div><div class="tt">Tu sais que des mandats rentrent</div></div>
+          <div class="card step"><div class="k">Le dimanche soir</div><div class="tt">Ton téléphone ne sonne plus</div></div>
+          <div class="card step"><div class="k">Tes vacances</div><div class="tt">La conciergerie tourne sans toi</div></div>
+          <div class="card step gold"><div class="k">Le calcul</div><div class="tt">12 mandats = 28 000 à 43 000 €</div><div class="dd">200 à 300 € par mois, sur 12 à 24 mois. Et ça se cumule.</div></div>
+          <div class="card step ink"><div class="k">Et surtout</div><div class="tt">Tu repars avec la compétence</div></div>
+        </div>
+        <div class="pcard step" style="min-height:0;justify-content:center;padding:40px 36px">
+          <img class="ph" src="assets/preuves/hostimo-mathieu.jpg" alt="" style="width:150px;height:150px">
+          <div class="q" style="font-size:28px;line-height:1.35;margin-top:26px;padding-top:0;color:var(--ink)">« Si tu appliques vraiment le système, il est impossible d'échouer. »</div>
+          <div class="nm" style="margin-top:22px">Mathieu · Hostimo</div><div class="city">Valence · 100 logements, 72 dès la première année</div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes" data-h="07 · Bénéfice émotionnel">
+      <q>Concrètement, dans ta vie, ça veut dire quoi ? Ça veut dire ne plus te demander chaque début de mois si des mandats vont rentrer. Ça veut dire un téléphone qui ne sonne plus pour un check-in raté le dimanche soir. Ça veut dire des vacances où ta conciergerie continue de tourner sans toi.</q>
+      <q>Et fais le calcul : un propriétaire, c'est 200 à 300 € par mois sur 12 à 24 mois. 12 mandats, c'est entre 28 000 et 43 000 € de chiffre d'affaires sécurisé sur la durée des contrats. Et ça se cumule mois après mois.</q>
+      <q>Surtout, tu ne repars pas juste avec des outils, tu repars avec la compétence. Une fois que tu sais faire venir des propriétaires, tu le sais pour de bon.</q>
+      <p>Reprends ici <b>ses mots</b> de la slide 3 : son pourquoi, sa douleur, son téléphone du dimanche soir.</p>
+    </aside>
+  </section>
+
+  <!-- 15. QUESTIONS DE QUALIFICATION -->
+  <section class="slide" data-title="Trois questions">
+    <div class="hd"><span class="eyebrow">Avant la partie 3</span><div class="sep"></div><h2>Trois questions, <em>sois honnête</em>.</h2><div class="num">15</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="plan">
+        <div class="p step"><div class="n mono">1</div><div class="tt">Ça te plaît ?</div><div class="dd">Pourquoi ?</div></div>
+        <div class="p step"><div class="n mono">2</div><div class="tt">C'est ce qu'il te faut ?</div><div class="dd">Pour 12 mandats en 6 mois.</div></div>
+        <div class="p step ink"><div class="n mono">3</div><div class="tt">Sans le risque ?</div><div class="dd">Qu'est-ce qui t'empêcherait de dire « on y va » ?</div></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="08 · Questions de qualification">
+      <q>Maintenant que tu sais tout ça, je te pose deux ou trois questions pour voir si ça matche. Sois honnête, ok ?</q>
+      <ul><li><q>Est-ce que ce que je t'ai présenté te plaît ? Pourquoi ?</q></li><li><q>Tu penses que c'est ce qu'il te faut pour signer 12 nouveaux mandats d'ici 6 mois ?</q></li><li><q>Si on t'enlève le risque avec une garantie, est-ce qu'il reste quoi que ce soit qui t'empêche de dire « allez, on y va » ?</q></li></ul>
+      <p>Note la réponse à la 3 : c'est l'objection à traiter après le prix.</p>
+    </aside>
+  </section>
+
+  <!-- 16. TRIPLE GARANTIE -->
+  <section class="slide" data-title="La triple garantie">
+    <div class="hd"><span class="eyebrow">3 · La triple garantie</span><div class="sep"></div><h2>Le risque est <em>de notre côté</em>.</h2><div class="num">16</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="gar">
+        <div>
+          <div class="pal step"><div class="d mono">14<small>JOURS</small></div><div><div class="tt">Satisfait ou remboursé</div><div class="dd">Audit et plan de lancement. Remboursement intégral, sans justification.</div></div></div>
+          <div class="pal step"><div class="d mono">60<small>JOURS</small></div><div><div class="tt">3 premiers mandats</div><div class="dd">Sinon, 1 000 € de budget pub financés dans ton business.</div></div></div>
+          <div class="pal step"><div class="d mono">120<small>JOURS</small></div><div><div class="tt">6 mandats, à ton choix</div><div class="dd"><b>Soit</b> remboursement intégral du fixe + 1 000 €. <b>Soit</b> 90 jours gratuits de plus, et 12 mandats à 180 jours, sinon remboursement.</div></div></div>
+          <p class="contract step" style="margin-top:22px">Moins de 10 demandes de remboursement sur 600+. Un mandat signé = un contrat signé, logement en ligne ou en cours de mise en ligne.</p>
+        </div>
+        <div class="paper step"><div class="ln2 t"></div><div class="ln2"></div><div class="ln2 s"></div><div class="ln2"></div><div class="ln2 xs"></div><div class="ln2" style="margin-top:34px"></div><div class="ln2 s"></div><div class="ln2"></div><div class="ln2 xs"></div><div class="ln2" style="margin-top:34px"></div><div class="ln2 s"></div><svg class="seal"><use href="#sceau"/></svg><div class="sigline" style="margin-top:46px;width:60%"><span>Signé le</span><i></i><b>✕</b></div></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="Partie 3 · La triple garantie (partage d'écran)">
+      <q>Voici la garantie à laquelle tu as droit en nous rejoignant. Le risque est entièrement de notre côté.</q>
+      <ul><li><q>Garantie n°1, 14 jours : si l'audit et le plan de lancement ne te conviennent pas, remboursement intégral, sans justification.</q></li><li><q>Garantie n°2, 60 jours : si tu n'as pas signé tes 3 premiers mandats dans les 60 jours après la mise en ligne du funnel, on finance 1 000 € de budget pub dans ton business.</q></li><li><q>Garantie n°3, 120 jours, au choix : soit, si tu n'as pas signé 6 nouveaux mandats en 120 jours, on te rembourse intégralement le fixe, plus 1 000 € de dédommagement ; soit on continue l'accompagnement gratuitement 90 jours de plus, et si tu n'as pas 12 nouveaux mandats à 180 jours, remboursement intégral du fixe.</q></li></ul>
+      <q>Pourquoi on peut se le permettre ? Moins de 10 demandes de remboursement sur plus de 600 personnes accompagnées. Et c'était avec un public moins discipliné que des gérants déjà en activité comme toi.</q>
+      <div class="rule">Point ouvert : « le fixe » n'est défini que pour la formule aux résultats. Pour le 3 fois et le comptant, ce qui est remboursé doit être écrit noir sur blanc dans le contrat avant le premier closing.</div>
+    </aside>
+  </section>
+
+  <!-- 17. CONDITIONS -->
+  <section class="slide" data-title="La seule chose qu'on te demande">
+    <div class="hd"><span class="eyebrow">3 · La triple garantie</span><div class="sep"></div><h2>Une seule chose : <em>appliquer le système</em>.</h2><div class="num">17</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="g5">
+        <div class="cond step" style="flex-direction:column;gap:14px"><div class="ck">1</div><div><div class="tt">Secteur validé à l'audit</div></div></div>
+        <div class="cond step" style="flex-direction:column;gap:14px"><div class="ck">2</div><div><div class="tt">Budget pub chaque mois</div></div></div>
+        <div class="cond step" style="flex-direction:column;gap:14px"><div class="ck">3</div><div><div class="tt">Présent aux RDV</div></div></div>
+        <div class="cond step" style="flex-direction:column;gap:14px"><div class="ck">4</div><div><div class="tt">Le script et Node</div></div></div>
+        <div class="cond step" style="flex-direction:column;gap:14px"><div class="ck">5</div><div><div class="tt">Reporting chaque semaine</div></div></div>
+      </div>
+      <p class="contract step" style="margin-top:32px;font-size:24px">Tout est écrit dans le contrat.</p>
+    </div>
+    <aside class="notes" data-h="Partie 3 · Les conditions, au contrat">
+      <q>La seule chose qu'on te demande, c'est d'appliquer ce qui produit les mandats : un secteur validé à l'audit, le budget pub engagé chaque mois, être présent aux rendez-vous bookés, utiliser le script et Node, et nous envoyer ton reporting chaque semaine. Tout est écrit dans le contrat.</q>
+      <p>Montre la page garantie + conditions du contrat si tu l'as sous la main.</p>
+    </aside>
+  </section>
+
+  <!-- 18. CERTITUDE 1 → 10 -->
+  <section class="slide" data-title="Sur une échelle de 1 à 10">
+    <div class="hd"><span class="eyebrow">Une dernière question</span><div class="sep"></div><h2>Sur 1 à 10, <em>tu es à combien</em> ?</h2><div class="num">18</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <p class="lead">Spécifiquement sur la méthode. 12 mandats en 6 mois, avec nous.</p>
+      <div class="scale" id="scale">
+        <button class="lo">1</button><button class="lo">2</button><button class="lo">3</button><button class="lo">4</button><button class="lo">5</button><button class="lo">6</button><button class="lo">7</button><button class="lo">8</button><button>9</button><button>10</button>
+      </div>
+      <div class="verdict" id="verdict">Moi, je suis à <em>12 / 10</em>.</div>
+    </div>
+    <aside class="notes" data-h="09 · Phase de certitude (monter à 10/10)">
+      <q>Une dernière question avant la suite. On a remarqué que les gérants qui ont les meilleurs résultats sont ceux qui sont sûrs à 100 % de réussir avec nous, et ce, avant même de démarrer. Sur une échelle de 1 à 10 : à 1, tu penses que ça ne marchera pas du tout pour toi ; à 10, tu es certain de signer 12 nouveaux mandats en 6 mois avec nous. Tu te situes à combien, spécifiquement sur la méthode ? Moi, je suis à 12/10.</q>
+      <div class="rule">Tu ne passes pas à la suite sans un chiffre. Clique sur le chiffre qu'il donne : la slide te souffle la relance.</div>
+      <p>S'il n'est pas à 10, il a une zone de flou sur le comment. Creuse : les pubs dans son secteur ? la setteuse ? sa capacité à signer en rendez-vous ? le city manager à distance ? la loi Hoguet ? Apporte-lui une seule chose : de la clarté.</p>
+    </aside>
+  </section>
+
+  <!-- 19. SE POSITIONNER -->
+  <section class="slide" data-title="Un oui ou un non, dans cet appel">
+    <div class="hd"><span class="eyebrow">Avant le prix</span><div class="sep"></div><h2><em>Un oui ou un non</em>, dans cet appel.</h2><div class="num">19</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="yn">
+        <div class="o oui step"><div class="h">Oui</div><ul><li>Inscription ensemble, maintenant</li><li>Contrat signé en ligne</li><li>Audit secteur sous 24 h</li><li>Moteur en place sous 7 jours</li></ul></div>
+        <div class="o non step"><div class="h">Non</div><ul><li>C'est ok</li><li>Le plan est à toi</li><li>On se quitte bien</li></ul></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="10 · Le faire se positionner dans le call">
+      <q>Avant que je t'explique comment nous rejoindre : on a beaucoup d'appels par jour, donc on ne fait pas de deuxième rendez-vous. Toutes les infos sont données dans cet appel. Je te demande juste de te positionner après mon explication : soit tu me dis oui, on fait l'inscription ensemble et ton audit secteur démarre dans les 24 h ; soit tu me dis non, et c'est totalement ok. Ça te va ?</q>
+      <div class="rule">Tu ne passes pas à la suite tant qu'il n'a pas confirmé qu'il dira oui ou non dans cet appel.</div>
+      <p>S'il résiste : <q>Je me suis peut-être mal exprimé. Je te demande juste un oui ou un non après mon explication. Je préfère un non clair à une situation en suspens.</q></p>
+    </aside>
+  </section>
+
+  <!-- 20. LE PRIX AVEC CONTRASTE -->
+  <section class="slide" data-title="Ce que ça vaut, et ce que ça coûte">
+    <div class="hd"><span class="eyebrow">Comment nous rejoindre</span><div class="sep"></div><h2>Ce que ça vaut, <em>et ce que ça coûte</em>.</h2><div class="num">20</div><img class="plogo hl" alt=""></div>
+    <div class="bd top">
+      <div class="stack">
+        <div>
+          <div class="lines">
+            <div class="ln step" data-val="1500"><div class="t">Audit de ton secteur<small>Reda · 24 h</small></div><div class="v mono">1 500 €</div></div>
+            <div class="ln step" data-val="2000"><div class="t">Ton offre propriétaire réécrite<small>Martin, Julien · 7 jours</small></div><div class="v mono">2 000 €</div></div>
+            <div class="ln step" data-val="2000"><div class="t">Mise en conformité loi Hoguet<small>Martin · 7 jours</small></div><div class="v mono">2 000 €</div></div>
+            <div class="ln step" data-val="2000"><div class="t">Pack juridique rédigé par une avocate<small>Jour 0</small></div><div class="v mono">2 000 €</div></div>
+            <div class="ln step" data-val="6000"><div class="t">Funnel propriétaires clé en main<small>Pubs Meta et Google, landing, formulaire · 7 jours</small></div><div class="v mono">6 000 €</div></div>
+            <div class="ln step" data-val="3000"><div class="t">Setteuse dédiée<small>Dès le 1er lead · par trimestre</small></div><div class="v mono">3 000 €</div></div>
+            <div class="ln step" data-val="2500"><div class="t">Script, simulateur, objections<small>Julien, Martin · 48 h</small></div><div class="v mono">2 500 €</div></div>
+            <div class="ln step" data-val="1500"><div class="t">Node : licence, paramétrage, crédits leads<small>Julien · 7 jours</small></div><div class="v mono">1 500 €</div></div>
+            <div class="ln step" data-val="1000"><div class="t">Recrutement d'aides-ménagères<small>Reda · 14 jours</small></div><div class="v mono">1 000 €</div></div>
+            <div class="ln step" data-val="2000"><div class="t">Process de délégation<small>Julien · 7 jours</small></div><div class="v mono">2 000 €</div></div>
+            <div class="ln step" data-val="2500"><div class="t">City manager à distance<small>Reda · selon le secteur</small></div><div class="v mono">2 500 €</div></div>
+            <div class="ln step" data-val="4500"><div class="t">Accès privé à Martin, Reda et Julien<small>Appels de validation, reporting hebdo · 6 à 12 mois</small></div><div class="v mono">4 500 €</div></div>
+          </div>
+          <div class="total"><div class="t">Valeur</div><div class="vt mono" id="vt">0 €</div></div>
+          <div class="total step" style="background:var(--gold-soft);color:var(--ink);margin-top:8px"><div class="t" style="color:var(--gold-ink)">Face à, avec 12 mandats</div><div class="vt mono" style="color:var(--ink);font-size:36px">28 000 à 43 000 €</div></div>
+        </div>
+        <div class="pricebox">
+          <svg class="seal"><use href="#sceau"/></svg>
+          <div class="eyebrow" style="margin-bottom:18px">Ce n'est pas</div>
+          <div class="nope">
+            <div class="step">30 000 €</div>
+            <div class="step">20 000 €</div>
+            <div class="step">15 000 €</div>
+          </div>
+          <div class="yes step">
+            <div class="lb">Pour nous rejoindre</div>
+            <div class="v">12 000 €<small>TTC</small></div>
+            <div class="dd"><b>3 × 4 000 € HT</b>. En une fois : <b>9 970 € HT</b>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes" data-h="11 · Annonce du prix avec contraste">
+      <q>Top. Je t'explique comment ça se passe pour nous rejoindre ?</q>
+      <p>Déroule la pile de valeur ligne par ligne (le total monte tout seul) : <q>Si on additionne tout : audit, offre propriétaire réécrite, mise en conformité, pack juridique, funnel, setteuse, script, Node, recrutement, process, city manager, accès à Martin, Reda et Julien, la valeur dépasse les 30 000 €. Et ça, face à 28 000 à 43 000 € de chiffre d'affaires sécurisé avec 12 mandats.</q></p>
+      <q>Pour nous rejoindre, ce n'est pas 30 000 €, ni 20 000 €, ni même 15 000 €. C'est 12 000 € TTC, soit 3 fois 4 000 € HT. Et si tu règles en une fois, c'est 9 970 € HT.</q>
+      <div class="rule">Quoi qu'il dise après le prix, enchaîne directement : test sans le prix (2A), certitude (2B), isoler et traiter (2C). La formule aux résultats n'est PAS annoncée ici : c'est un repli, slide suivante, touche R.</div>
+    </aside>
+  </section>
+
+  <!-- 21. COMMENT RÉGLER (+ repli caché) -->
+  <section class="slide" data-title="Comment régler">
+    <div class="hd"><span class="eyebrow">Comment nous rejoindre</span><div class="sep"></div><h2>12 000 € TTC. <em>Deux façons de le régler.</em></h2><div class="num">21</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="prices" id="prices">
+        <div class="price step hi"><div class="nm">En 3 fois</div><div class="v mono">3 × 4 000 €<small>HT</small></div><div class="dd">Le prix standard. Tout inclus, la triple garantie.</div><ul><li>Première mensualité à la signature</li><li>Les deux suivantes à 30 et 60 jours</li></ul></div>
+        <div class="price step"><div class="nm">En une fois</div><div class="v mono">9 970 €<small>HT</small></div><div class="dd">Même accompagnement, mêmes garanties.</div><ul><li>Réglé à la signature</li></ul></div>
+        <div class="price repli" id="repli"><div class="nm">Aux résultats</div><div class="v mono">5 000 €<small>HT</small></div><div class="dd">Puis 600 € HT par mandat signé, plafonné à 9.</div><ul><li>Le fixe à la signature</li><li>La suite quand les propriétaires signent</li></ul></div>
+      </div>
+      <div class="val step"><div class="big mono">28 à 43 k€</div><div class="tx">avec 12 mandats, sur la durée des contrats. Budget pub en plus, payé en direct : quelques centaines d'euros par mois, affiné à l'audit.</div></div>
+      <div class="kw step" style="margin-top:22px"><span>Bonus 48 h : recrutement de ton setteur interne</span><span>Bonus 48 h : audit de tes annonces Airbnb</span></div>
+    </div>
+    <aside class="notes" data-h="11 · Les deux options, et le repli (touche R)">
+      <q>C'est 12 000 € TTC, soit 3 fois 4 000 € HT. Et si tu règles en une fois, c'est 9 970 € HT.</q>
+      <div class="rule">Option de repli, SEULEMENT pour un profil prudent après l'étape 2C (objection traitée, certitude à 9-10, bloqué sur l'argent). Appuie sur <b>R</b> pour faire apparaître la troisième carte.</div>
+      <q>Pour les gérants qui veulent qu'on prenne encore plus de risque avec eux, on a une formule aux résultats : 5 000 € HT de fixe, puis 600 € HT par mandat signé, plafonné à 9 mandats. Tu ne paies la suite que quand les propriétaires signent.</q>
+      <q>Et si tu t'inscris dans les 48 h, on ajoute les sessions pour recruter ton propre setteur après 90 jours, et l'audit de tes annonces Airbnb.</q>
+    </aside>
+  </section>
+
+  <!-- 22. OBJECTIONS (repères, pas de réponses rédigées) -->
+  <section class="slide" data-title="Les objections qu'on entend le plus">
+    <div class="hd"><span class="eyebrow">Tes doutes</span><div class="sep"></div><h2>Ce qu'on entend <em>le plus souvent</em>.</h2><div class="num">22</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="obj">
+        <div class="ob step"><div class="q">« Mon secteur est trop petit. »</div><div class="a">Audit 24 h · élargir · à distance</div></div>
+        <div class="ob step"><div class="q">« Je suis déjà sous l'eau. »</div><div class="a">Setteuse · Node · city manager</div></div>
+        <div class="ob step"><div class="q">« J'ai déjà payé une agence. »</div><div class="a">Leads froids vs toute la chaîne · contrat</div></div>
+        <div class="ob step"><div class="q">« Le budget pub en plus. »</div><div class="a">Quelques centaines d'euros · un mandat = 2 400 à 3 600 €</div></div>
+        <div class="ob step"><div class="q">« Et si ça ne marche pas ? »</div><div class="a">60 j · 120 j · écrit dans le contrat</div></div>
+        <div class="ob step"><div class="q">« J'en parle à mon associé. »</div><div class="a">Qu'est-ce qu'il dirait ? · traiter maintenant</div></div>
+        <div class="ob step"><div class="q">« Je n'ai pas la carte G. »</div><div class="a">Comme la plupart · audit Martin · deux voies</div></div>
+        <div class="ob step"><div class="q">« J'ai déjà fait une formation. »</div><div class="a">Gérer ≠ faire venir des propriétaires</div></div>
+        <div class="ob step"><div class="q">« J'attends la haute saison. »</div><div class="a">Signé aujourd'hui = tourne en haute saison</div></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="12 · Gestion d'objections">
+      <h4>Étape 2A · Test sans le prix</h4>
+      <q>Pas de problème [prénom]. Imagine une minute que tu n'aies rien à payer pour rejoindre l'accompagnement. Tu penses vraiment qu'on peut t'aider à signer 12 nouveaux mandats en 6 mois ?</q>
+      <p>OUI : c'est financier, passe à l'étape 3 (slide suivante). NON ou hésite : étape 2B.</p>
+      <h4>Étape 2B · Augmenter la certitude</h4>
+      <q>Je comprends. Ce qui compte pour moi, c'est l'entraide : quand on bosse ensemble, je m'implique autant que toi. Et nos meilleurs résultats viennent toujours des gérants sûrs à 100 % avant de commencer. Si on oublie complètement le prix : sur 1 à 10, tu es à combien, spécifiquement sur la méthode et l'accompagnement ?</q>
+      <p>9 ou 10 avec conviction : étape 3. Moins de 9, ou 9 hésitant : <q>Merci pour ton honnêteté. Par curiosité, qu'est-ce qui t'empêche d'être à un 9 ou 10 bien solide ?</q></p>
+      <div class="rule">S'il répond « je ne sais pas », « il faut que j'essaie », « je crois ce que je vois » : ne rentre pas dans son cadre. <q>Je te parle spécifiquement de la méthode. Sur 1 à 10, tu es sûr à combien de signer 12 mandats en 6 mois avec nous ?</q></div>
+      <h4>Étape 2C · Isoler et traiter</h4>
+      <ul><li>Isoler : <q>À part [objection], il n'y a rien d'autre qui t'empêche d'être à 10/10 ?</q></li><li>Clarifier : <q>Qu'est-ce que tu veux dire exactement par [objection] ? Développe.</q></li><li>Traiter : <q>Excellent. Pour [objection], voici comment ça marche…</q></li></ul>
+      <p>Trois appuis : ta conviction (<q>J'en suis sûr à 10 000 %.</q>), un témoignage (<q>Mathieu avait le même doute sur [objection], et avec lui on a fait [XYZ].</q>), la logique (<q>Ce n'est pas magique, c'est logique, regarde.</q>).</p>
+      <h4>Réponses aux objections fréquentes</h4>
+      <ul><li><b>Secteur trop petit</b> : audit sous 24 h ; si le secteur ne passe pas, on le dit et on rembourse. Sinon on élargit : villes voisines, résidences secondaires, un deuxième secteur géré à distance comme Reda et Julien.</li><li><b>Pas le temps</b> : c'est exactement pour ça. La setteuse appelle, Node automatise, le city manager prend voyageurs, planning et propriétaires. Il garde les RDV de signature.</li><li><b>Déjà une agence</b> : une agence ramène des leads froids et s'arrête quand on arrête de payer. Nous, toute la chaîne jusqu'au mandat signé, l'autonomie, et un engagement par contrat.</li><li><b>Budget pub</b> : quelques centaines d'euros par mois pour viser 3 mandats, affinés à l'audit. Un seul mandat rapporte 2 400 à 3 600 € sur la durée du contrat.</li><li><b>Et si ça ne marche pas</b> : 3 mandats à 60 jours sinon 1 000 € de pub ; 6 mandats à 120 jours sinon remboursement du fixe et 1 000 €. Écrit dans le contrat.</li><li><b>Mon associé</b> : qu'est-ce qu'il dirait, selon toi ? Qu'est-ce qui le ferait hésiter ? Traitons-le maintenant.</li><li><b>Carte G</b> : comme la plupart. Martin audite contrat et encaissements, et il choisit : sans carte G avec le pack juridique et Node, ou le dossier carte G accompagné.</li><li><b>Déjà une formation</b> : une formation apprend à gérer des logements. Nous, on installe le système qui fait venir les propriétaires, et on le fait tourner avec lui.</li><li><b>Haute saison</b> : un mandat signé aujourd'hui tourne en haute saison ; signé en haute saison, il tourne la saison d'après.</li></ul>
+      <p>Puis relance : <q>Maintenant que tu as vu ça, tu es à combien sur 10, spécifiquement sur la méthode ?</q> Moins de 9 : retour à 2B. Profil prudent bloqué sur l'argent après 2C : repli aux résultats (slide 21, touche R).</p>
+    </aside>
+  </section>
+
+  <!-- 23. CLOSING -->
+  <section class="slide" data-title="Les prochaines étapes">
+    <div class="hd"><span class="eyebrow">On y va</span><div class="sep"></div><h2>Tu me valides <em>le GO</em> ?</h2><div class="num">23</div><img class="plogo hl" alt=""></div>
+    <div class="bd">
+      <div class="tl">
+        <div class="ph step" style="min-height:360px"><div class="when">Maintenant</div><div class="tt">Le paiement</div><ul><li>Lien envoyé sur ton numéro</li><li>Caméra coupée 2 minutes, je reste là</li></ul></div>
+        <div class="ph step" style="min-height:360px"><div class="when">5 minutes</div><div class="tt">Le contrat</div><ul><li>Signé en ligne</li><li>Triple garantie + conditions dedans</li></ul></div>
+        <div class="ph step" style="min-height:360px"><div class="when">Dans l'heure</div><div class="tt">Tes accès</div><ul><li>WhatsApp privé : Martin, Reda, Julien</li><li>Portail mandat.studio, Node, pack juridique</li></ul></div>
+        <div class="ph step ink" style="min-height:360px;background:var(--ink);color:var(--paper);border-color:var(--ink)"><div class="when" style="color:var(--gold)">Sous 24 h</div><div class="tt" style="color:var(--paper)">Ton audit secteur</div><ul><li style="color:#E6DEC8">48 h : script et simulateur</li><li style="color:#E6DEC8">7 jours : moteur en place</li></ul></div>
+      </div>
+    </div>
+    <aside class="notes" data-h="13 · Closing et paiement">
+      <h4>Étape 3A · Situation financière</h4>
+      <q>Si je comprends bien, tu es sûr d'avoir les résultats avec nous. Qu'est-ce qui te manque pour démarrer ici et maintenant ?</q>
+      <p>Si c'est l'argent : <q>Ok. L'argent n'est généralement pas un vrai problème, parce qu'on trouve des solutions. Tout à l'heure, tu m'as dit disposer de [X €].</q> Pas de chiffre : <q>Tu es plus proche de 10 000 €, 5 000 € ou 3 000 € de côté ? Et sur tes autres comptes, ton épargne, la trésorerie de la société ?</q></p>
+      <q>Ça peut paraître bête, mais j'ai déjà eu des gérants qui ont démarré avec [son montant − 1 000 €] sur leur compte. Et rappelle-toi : en 3 fois, c'est 4 000 € HT aujourd'hui, le reste à 30 et 60 jours, quand tes premiers mandats rentrent. Dernière question pour l'organisation : combien va tomber sur ton compte dans les 30 prochains jours ?</q>
+      <h4>Étape 3B · Facilités</h4>
+      <q>Si tu es ok, je te présente comment on fait dans ces cas-là ? On peut découper le premier versement en [X fois, selon ses finances]. En contrepartie, je te demande un témoignage vidéo quand tu auras signé tes 3 premiers mandats, et de nous recommander 3 gérants une fois tes premiers résultats obtenus. Ça te semble juste ?</q>
+      <q>Super. Pour l'inscription, j'ai juste besoin de ton GO. Je t'envoie le lien de paiement, tu signes le contrat en ligne avec les garanties, je t'ajoute au groupe et à ton portail, et ton audit secteur démarre dans les 24 h.</q>
+      <p><q>Tu me valides le GO ?</q></p>
+      <h4>S'il bloque malgré un 10/10</h4>
+      <q>Je vois que tu bloques. Ce qui fera tes résultats, c'est d'aller vite. Normalement, je t'aurais laissé repartir. Mais comme je suis convaincu qu'on peut t'aider, ce que je te propose, c'est de sécuriser ta place avec un acompte de [montant] aujourd'hui, et on cale le reste ensemble. Tu veux que je t'explique ?</q>
+      <h4>Étape 3C · Renforcer la décision</h4>
+      <ul><li><q>Avant de valider, j'aime bien savoir : qu'est-ce qui t'a poussé à démarrer aujourd'hui ?</q> Laisse-le parler. <q>Et quoi d'autre ?</q></li><li><q>Top. Je t'envoie le lien de paiement, tu me rappelles ton numéro ?</q></li><li><q>Je coupe ma caméra deux minutes pour te laisser faire tranquillement, je reste sur l'appel.</q></li></ul>
+      <h4>Étape 3D · Inscription</h4>
+      <ul><li>Paiement refusé : reste en ligne, fais-toi décrire l'écran. Carte plafonnée : acompte par carte, solde par virement.</li><li>Paiement passé : groupe WhatsApp, contrat en ligne (portail), portail + Node, audit secteur lancé chez Reda.</li></ul>
+      <q>Félicitations [prénom], meilleure décision que tu pouvais prendre. Franchement, [sa situation, sa douleur], ça ne pouvait plus durer. Tu passes à l'action, et ce sont les gérants comme toi qui vont chercher les résultats vite. Bienvenue !</q>
+    </aside>
+  </section>
+
+  <!-- 24. CTA -->
+  <section class="slide cta" data-title="On lance ?">
+    <svg class="seal" style="left:120px;bottom:90px;width:240px;height:240px"><use href="#sceau"/></svg>
+    <div class="wm" style="font-size:56px;margin-bottom:40px"><span class="sys">Système</span><span class="lk"><span class="boxes"><span class="b">M</span><span class="dot"></span><span class="b">A</span><span class="dot"></span><span class="b">N</span><span class="dot"></span><span class="b">D</span><span class="dot"></span><span class="b">A</span><span class="dot"></span><span class="b">T</span></span><span class="tm">™</span></span></div>
+    <h1>On lance le Système M.A.N.D.A.T. <em>chez <span class="pname2">toi</span></em> ?</h1>
+    <div class="sub">Audit sous 24 h. Moteur en place sous 7 jours. Dès le premier propriétaire, un rendez-vous dans ton agenda.</div>
+    <div class="sigline step" style="width:640px;margin-top:60px"><span>Signé le</span><i></i><b>✕</b></div>
+    <aside class="notes" data-h="Bienvenue">
+      <q>Félicitations [prénom]. Bienvenue. Je t'ajoute au groupe tout de suite, et je préviens Reda pour ton audit.</q>
+      <p>Après l'appel : carte « Appel OK » dans le Discord, groupe WhatsApp créé, contrat vérifié signé dans le portail, audit secteur lancé.</p>
+    </aside>
+  </section>
+</div>
+
+<div class="hud"><button class="arrow" id="prev" aria-label="Précédent">←</button><div class="dots" id="dots"></div><div class="counter" id="counter"></div><button class="arrow" id="next" aria-label="Suivant">→</button><button class="arrow nb" id="notesBtn" title="Notes du closer (touche N)">N</button></div>
+
+<aside class="drawer" id="drawer"><div class="dh"><div><div class="eyebrow">Notes du closer</div><h3 id="dtitle"></h3></div><button id="dclose">Fermer · N</button></div><div class="dc" id="dcontent"></div></aside>
+
+<div class="doc" id="doc"></div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var deck = document.getElementById('deck'), slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsEl = document.getElementById('dots'), counterEl = document.getElementById('counter'), cur = 0;
+  var drawer = document.getElementById('drawer'), dtitle = document.getElementById('dtitle'), dcontent = document.getElementById('dcontent');
+
+  /* Personnalisation : JSON embarqué (<script id="perso">) ou passé dans l'URL (#p= / ?p=, base64 url-safe) */
+  function b64json(s) { try { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return JSON.parse(decodeURIComponent(escape(atob(s)))); } catch (e) { return null; } }
+  var PERSO = null;
+  try { var pe = document.getElementById('perso'); if (pe && pe.textContent.trim()) PERSO = JSON.parse(pe.textContent); } catch (e) {}
+  var pm = location.hash.match(/[#&]p=([^&]+)/) || location.search.match(/[?&]p=([^&]+)/);
+  if (pm) PERSO = b64json(pm[1]) || PERSO;
+  function lum(hex) { var m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return null; var n = parseInt(m[1], 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; }
+  function mix(hex, k) { var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; var f = function (c) { return Math.round(c * (1 - k) + 21 * k).toString(16).padStart(2, '0'); }; return '#' + f(r) + f(g) + f(b); }
+  function applyPerso(p) {
+    var root = document.documentElement; root.classList.add('perso');
+    if (p.couleur && lum(p.couleur) !== null) {
+      var l = lum(p.couleur), c = p.couleur.charAt(0) === '#' ? p.couleur : '#' + p.couleur;
+      root.style.setProperty('--marque', c);
+      root.style.setProperty('--marque-text', l > 0.45 ? mix(c, 0.55) : c);
+      root.style.setProperty('--marque-on', l > 0.5 ? '#15120C' : '#FBF7EC');
+      root.style.setProperty('--marque-soft', 'color-mix(in srgb, ' + c + ' 14%, #FFFFFF)');
+    }
+    if (p.logo) document.querySelectorAll('.plogo').forEach(function (i) { i.src = p.logo; i.style.display = 'block'; });
+    if (p.nom) { document.querySelectorAll('.pname').forEach(function (e) { e.textContent = p.nom; }); document.querySelectorAll('.pname2').forEach(function (e) { e.textContent = p.nom; }); }
+    if (p.ville) document.querySelectorAll('.pcity').forEach(function (e) { e.textContent = p.ville; });
+    if (p.prenom) document.querySelectorAll('.pfirst').forEach(function (e) { e.textContent = p.prenom + ', '; });
+    if (p.nom || p.logo) document.querySelectorAll('.for').forEach(function (e) { e.style.display = 'flex'; });
+    var r = p.reponses || {};
+    document.querySelectorAll('.fill[data-k]').forEach(function (f) { var k = f.getAttribute('data-k'); if (r[k]) f.textContent = r[k]; });
+    if (p.titre) document.title = p.titre;
+  }
+  if (PERSO) applyPerso(PERSO);
+
+  /* Mode document : le script complet, slide par slide */
+  if (params.get('script') === '1') {
+    document.body.classList.add('docmode'); document.documentElement.style.background = '#FBF7EC';
+    var doc = document.getElementById('doc'), h = '';
+    h += '<div class="eyebrow">Système M.A.N.D.A.T. · script de closing</div><h1>Le script de l’appel, slide par slide</h1>';
+    h += '<p class="intro">Script de closing B2B Concierge Elite (12 mandats en 6 mois), version du 6 novembre 2026. Chaque section correspond à une slide du deck : les slides sont des repères visuels, le texte à dire est ici et dans les notes (touche N). Les répliques sont entre guillemets, les règles en jaune.</p>';
+    slides.forEach(function (s, i) {
+      var n = s.querySelector('.notes'); if (!n) return;
+      h += '<h2><small>' + String(i + 1).padStart(2, '0') + '</small>' + (n.getAttribute('data-h') || '') + '</h2><div class="slref">Slide ' + (i + 1) + ' · ' + (s.getAttribute('data-title') || '') + '</div>' + n.innerHTML;
+    });
+    doc.innerHTML = h; return;
+  }
+
+  function fit() { var s = Math.min(innerWidth / 1920, innerHeight / 1080); deck.style.transform = 'translate(-50%,-50%) scale(' + s + ')'; }
+  addEventListener('resize', fit); fit();
+  slides.forEach(function (s, i) { var d = document.createElement('div'); d.className = 'dot'; d.addEventListener('click', function (e) { e.stopPropagation(); show(i); }); dotsEl.appendChild(d); });
+
+  /* Pile de valeur : chaque ligne révélée ajoute sa valeur au total, qui compte */
+  function fmt(n) { return n.toLocaleString('fr-FR').replace(/ | /g, ' ') + ' €'; }
+  function bump(slide) {
+    var vt = slide.querySelector('#vt'); if (!vt) return;
+    var sum = 0; slide.querySelectorAll('.ln.step.on[data-val]').forEach(function (l) { sum += parseInt(l.getAttribute('data-val'), 10); });
+    var from = parseInt(vt.getAttribute('data-cur') || '0', 10), t0 = performance.now();
+    vt.setAttribute('data-cur', sum);
+    (function tick(now) { var p = Math.min(1, (now - t0) / 450); var v = Math.round(from + (sum - from) * (1 - Math.pow(1 - p, 3))); vt.textContent = fmt(v); if (p < 1) requestAnimationFrame(tick); })(t0);
+  }
+  function advance(slide) { var st = slide.querySelector('.step:not(.on)'); if (st) { st.classList.add('on'); bump(slide); return true; } return false; }
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, j) { s.classList.toggle('active', j === cur); });
+    Array.prototype.forEach.call(dotsEl.children, function (d, j) { d.classList.toggle('on', j === cur); });
+    counterEl.textContent = (cur + 1) + ' / ' + slides.length;
+    var n = slides[cur].querySelector('.notes'); dtitle.textContent = n ? (n.getAttribute('data-h') || '') : ''; dcontent.innerHTML = n ? n.innerHTML : '';
+    var v = document.getElementById('bov'); if (v && !v.paused) v.pause();
+  }
+  function next() { if (advance(slides[cur])) return; show(cur + 1); }
+  function prev() { show(cur - 1); }
+  function toggleNotes() { drawer.classList.toggle('open'); }
+  function toggleRepli() { var r = document.getElementById('repli'); if (!r) return; r.classList.toggle('on'); document.getElementById('prices').classList.toggle('three', r.classList.contains('on')); }
+  document.getElementById('next').addEventListener('click', function (e) { e.stopPropagation(); next(); });
+  document.getElementById('prev').addEventListener('click', function (e) { e.stopPropagation(); prev(); });
+  document.getElementById('notesBtn').addEventListener('click', function (e) { e.stopPropagation(); toggleNotes(); });
+  document.getElementById('dclose').addEventListener('click', toggleNotes);
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.isContentEditable) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    if (e.key === 'Home') show(0); if (e.key === 'End') show(slides.length - 1);
+    if (e.key === 'n' || e.key === 'N') toggleNotes(); if (e.key === 'Escape') drawer.classList.remove('open');
+    if (e.key === 'r' || e.key === 'R') toggleRepli();
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.hud') || e.target.closest('.drawer') || e.target.closest('a') || e.target.closest('.scale') || e.target.closest('.fill') || e.target.closest('#bestof')) return;
+    advance(slides[cur]);
+  });
+
+  /* Échelle de certitude : clique sur le chiffre donné, la relance s'affiche */
+  var verdict = document.getElementById('verdict');
+  document.querySelectorAll('#scale button').forEach(function (b) {
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      document.querySelectorAll('#scale button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on');
+      var n = parseInt(b.textContent, 10);
+      if (n >= 9) verdict.innerHTML = '<em>' + n + ' / 10.</em> Top. On passe à la suite.';
+      else verdict.innerHTML = '<em>' + n + ' / 10.</em> Qu’est-ce qui t’empêche d’être à un 9 ou 10 bien solide ?';
+    });
+  });
+
+  /* Best-of : si assets/bestof.mp4 existe à côté du deck, la vidéo se joue au clic */
+  var bo = document.getElementById('bestof'), bov = document.getElementById('bov');
+  if (bo && bov) {
+    bov.src = 'assets/bestof.mp4';
+    bov.addEventListener('loadedmetadata', function () { bov.style.display = 'block'; bo.classList.add('ready'); });
+    bo.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!bo.classList.contains('ready')) { advance(slides[cur]); return; }
+      var ph = bo.querySelector('.ph');
+      if (bov.paused) { bov.play(); ph.style.display = 'none'; } else { bov.pause(); ph.style.display = ''; }
+    });
+  }
+
+  if (params.get('full') === '1') { document.querySelectorAll('.step').forEach(function (el) { el.classList.add('on'); }); slides.forEach(bump); if (params.get('repli') === '1') toggleRepli(); }
+  show((parseInt(params.get('slide') || '1', 10) || 1) - 1);
+})();
+</script>
+</body>
+</html>
